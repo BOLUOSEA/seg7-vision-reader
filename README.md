@@ -62,10 +62,16 @@ py seg7_reader.py selftest
 # 3) 看当前画面亮度，判断该不该减光
 py seg7_reader.py probe
 
-# 4) 交互框选三个数字的外接矩形，生成 ROI 模板
+# 4）调整曝光
+py seg7_reader.py --props --camera 0
+
+# 5) 交互框选三个数字的外接矩形，生成 ROI 模板
 py seg7_reader.py calib
 
-# 5) 日常读数
+# 6) 周期采集
+py seg7_reader.py read --template seg7_roi.json --every 60 --csv battery_log.csv --stop-at 100 0
+
+# 7) 日常读数
 py seg7_reader.py read --template seg7_roi.json
 ```
 
