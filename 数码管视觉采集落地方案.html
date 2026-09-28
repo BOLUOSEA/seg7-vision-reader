@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="3eJDKuUVH1ZbiFQg0ER9lk" data-dm-ref="1"><head data-page-node-id="NKjsF9FkjEePao2GpJoEXf">
+<meta charset="utf-8" data-page-node-id="mbNsj76L1nDx7hGRJvdARv">
+<meta name="viewport" content="width=device-width, initial-scale=1" data-page-node-id="M6ci16oDWHWQW6VpkraYVQ">
+<title>数码管视觉采集落地方案 · DCXG100</title>
+<style>
+  :root{
+    --ink:#1c1c1a; --ink2:#5f5e5a; --ink3:#888780;
+    --line:#e3e1d9; --line2:#d3d1c7;
+    --bg:#faf9f6; --card:#ffffff;
+    --blue:#185fa5; --blue-bg:#e6f1fb; --blue-ink:#0c447c;
+    --teal:#0f6e56; --teal-bg:#e1f5ee; --teal-ink:#085041;
+    --amber:#ba7517; --amber-bg:#faeeda; --amber-ink:#854f0b;
+    --red:#a32d2d; --red-bg:#fcebeb; --red-ink:#791f1f;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:400 15px/1.7 -apple-system,"Segoe UI","Microsoft YaHei",system-ui,sans-serif;
+  }
+  main{max-width:900px;margin:0 auto;padding:48px 28px 96px}
+  header{border-bottom:2px solid var(--ink);padding-bottom:20px;margin-bottom:36px}
+  .eyebrow{font-size:12px;letter-spacing:.14em;color:var(--ink3);text-transform:uppercase;margin:0 0 10px}
+  h1{font-size:28px;font-weight:500;margin:0 0 14px;letter-spacing:-.01em}
+  .lede{font-size:16px;color:var(--ink2);margin:0;max-width:70ch}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .meta span{font-size:12px;color:var(--ink2);background:#fff;border:1px solid var(--line2);border-radius:999px;padding:3px 11px}
+  h2{font-size:19px;font-weight:500;margin:48px 0 14px;padding-top:22px;border-top:1px solid var(--line)}
+  h2 .n{color:var(--ink3);font-weight:400;margin-right:10px}
+  h3{font-size:15px;font-weight:500;margin:26px 0 8px}
+  p{margin:0 0 14px;color:var(--ink2)}
+  strong{font-weight:500;color:var(--ink)}
+  code{font-family:ui-monospace,"Cascadia Code",Consolas,monospace;font-size:.88em;background:#f1efe8;border:1px solid var(--line);border-radius:4px;padding:1px 5px;color:var(--ink)}
+  pre{font-family:ui-monospace,"Cascadia Code",Consolas,monospace;font-size:12.5px;line-height:1.65;background:#fff;border:1px solid var(--line2);border-radius:10px;padding:16px 18px;overflow:auto;color:var(--ink)}
+  pre code{background:none;border:0;padding:0}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:18px 0 26px}
+  .card{background:var(--card);border:1px solid var(--line2);border-radius:12px;padding:14px 16px}
+  .card .k{font-size:12px;color:var(--ink3);margin:0 0 5px}
+  .card .v{font-size:19px;font-weight:500;margin:0;line-height:1.3}
+  .card .s{font-size:12px;color:var(--ink3);margin:5px 0 0;line-height:1.5}
+  table{width:100%;border-collapse:collapse;margin:16px 0 22px;font-size:13.5px;background:#fff;border:1px solid var(--line2);border-radius:10px;overflow:hidden}
+  th,td{text-align:left;padding:9px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:#f7f6f2;font-weight:500;font-size:12.5px;color:var(--ink2);white-space:nowrap}
+  tr:last-child td{border-bottom:0}
+  td.num{font-family:ui-monospace,Consolas,monospace;white-space:nowrap}
+  .callout{border-radius:10px;padding:14px 18px;margin:18px 0;font-size:14px;line-height:1.65}
+  .callout p{margin:0 0 8px;color:inherit}
+  .callout p:last-child{margin:0}
+  .callout .t{font-weight:500;display:block;margin-bottom:5px}
+  .c-blue{background:var(--blue-bg);color:var(--blue-ink);border:1px solid #b5d4f4}
+  .c-teal{background:var(--teal-bg);color:var(--teal-ink);border:1px solid #9fe1cb}
+  .c-amber{background:var(--amber-bg);color:var(--amber-ink);border:1px solid #fac775}
+  .c-red{background:var(--red-bg);color:var(--red-ink);border:1px solid #f7c1c1}
+  ul,ol{margin:0 0 16px;padding-left:22px;color:var(--ink2)}
+  li{margin:5px 0}
+  li strong{color:var(--ink)}
+  .tag{display:inline-block;font-size:11px;font-weight:500;padding:1px 8px;border-radius:999px;vertical-align:1px;margin-right:6px}
+  .tag.must{background:var(--red-bg);color:var(--red-ink)}
+  .tag.rec{background:var(--teal-bg);color:var(--teal-ink)}
+  .tag.opt{background:#f1efe8;color:var(--ink2)}
+  figure{margin:22px 0;background:#fff;border:1px solid var(--line2);border-radius:12px;padding:20px}
+  figcaption{font-size:12.5px;color:var(--ink3);margin-top:14px;text-align:center}
+  .foot{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink3)}
+</style>
+<style id="__dm_no_drag_style__">* { -webkit-user-drag: none !important; }</style><style id="__dm_bindable_badge_style__">[data-sp-bindable="database"]{outline:1px dashed #0088ff;outline-offset:2px;border-radius:4px;}[data-sp-bindable="database"] *{pointer-events:none !important;transition:none !important;animation:none !important;}[data-sp-bindable="database"]{transition:none !important;animation:none !important;}</style></head>
+<body data-page-node-id="lNCer8VtytZCi83MamvhNk" style="">
+<main data-page-node-id="uXRDbyQdA0J2JpnFO8iJeA">
+
+<header data-page-node-id="BwAHZKpxyMl7RChBwfzBWb">
+  <p class="eyebrow" data-page-node-id="eVFaCy2yQf2c546Rn9qZ6i">机器视觉 · 落地方案 v1</p>
+  <h1 data-page-node-id="DDXIyo3vSqDDpvFMi7iTer">数码管数字视觉采集方案</h1>
+  <p class="lede" data-page-node-id="peUZaGmd57hR6qy9luNpIN">用 DCXG100 全局快门黑白工业相机，读取 3 位 7 段数码管（左位为半位，仅 b/c 两段）显示的电池电量值。被测物静止、仅允许拍照、单帧读全部 3 位。</p>
+  <div class="meta" data-page-node-id="n14Md9nVLGUvluxk7CdaLo">
+    <span data-page-node-id="lNbMuzUrlYjBHNNaDlbBmp">相机：DCXG100 · 1280×720 · 全局快门 · 黑白 · UVC</span>
+    <span data-page-node-id="9D5lFqmWi5EvQCy7NL6lgY">目标值域：0 – 100</span>
+    <span data-page-node-id="U66w1HcUPCuCYEERqTDDSS">场景：静态 · 非接触 · 单帧</span>
+  </div>
+
+  <div class="callout c-teal" style="margin-top:26px" data-page-node-id="FSpcx66ABJCPHcQxdG96hR">
+    <p data-page-node-id="VIO7DR3DurbWTADSRQKGI4"><span class="t" data-page-node-id="B2mqmNTHmljM9mpgoJiicg">当前状态：已在真实工位跑通并验证（2026-09-28）</span></p>
+    <p data-page-node-id="YpCTRtmh8AZAJinbIoy18H">方案已在你们这块板上用真值验证通过 —— <strong data-page-node-id="Do5NRHGCBjm0qkU8RxwZoJ">读数全部正确、零丢弃</strong>。参数 <code data-page-node-id="J5apbIfppfrbSMU7tZe5Y1">--fusion mean --frames 3 --agree 2</code> 已是代码默认值，日常读数只需：</p>
+    <pre data-page-node-id="qmof2wvgAxAMKG43dsHHDu"><code data-page-node-id="BPCSEp1ED5uHGFa6vwWqdo">py seg7_reader.py read --template seg7_roi.json</code></pre>
+    <p data-page-node-id="rBI0jNoDukaqNRNJzEaqgw">剩余的改进都属于<strong data-page-node-id="8h6BY4X53wtxoRbLNUQIis">裕量加固</strong>而非功能补齐：① 换更长焦镜头，把笔画宽从 8–9 px 提到 20 px 以上；② 长期可把当前的「短曝光 + mean 滤波」升级为「长曝光 + 减光」。两者都会让裕量更足，但都不影响当前可用性。详见第 13 节实测记录。</p>
+  </div>
+</header>
+
+<h2 data-page-node-id="YL8biEZExGjASazWMFiX5B"><span class="n" data-page-node-id="WLbDpggtXSBseZxqCLXztR">00</span>结论速览</h2>
+
+<div class="cards" data-page-node-id="Koht06jrf3qmFw50JD1q32">
+  <div class="card" data-page-node-id="3wDerE9lyiBgERAqc3rakE">
+    <p class="k" data-page-node-id="6YgJwUazB1MoCWCLN2tRDH">推荐路线</p>
+    <p class="v" data-page-node-id="uF5zX0bglsK9WuTuXCPVPn">长曝光积分</p>
+    <p class="s" data-page-node-id="D96KG9MpaGFTEy0NqEeGNr">曝光 ≥ 1 个刷新周期，一次快门读全 3 位</p>
+  </div>
+  <div class="card" data-page-node-id="3Smg9qZbVOocLrcyoiIKm2">
+    <p class="k" data-page-node-id="sljSf9ZJ1VANW0PGz5iWJx">合法显示图案</p>
+    <p class="v" data-page-node-id="XvegmHVeV18BbBDlQvGY4L">101 种</p>
+    <p class="s" data-page-node-id="gFbZGhlsSA8dLGczpT3J11">原始状态空间 220 种，54% 物理不可能</p>
+  </div>
+  <div class="card" data-page-node-id="GWoguI6WJ676J8dGtYCChm">
+    <p class="k" data-page-node-id="h8jKqqn6bFvTLmxP10ub2i">判据总数</p>
+    <p class="v" data-page-node-id="duLXJI3ib3aNcYSdxEe2a6">16 个是非题</p>
+    <p class="s" data-page-node-id="jpxI2x6YOUDACVGpnVLjZQ">左位 2 段 + 中位 7 段 + 右位 7 段</p>
+  </div>
+  <div class="card" data-page-node-id="8vcYiT2xLVQ9hQh3QnBY8f">
+    <p class="k" data-page-node-id="4mOGGTQQsbkC2364EtQVz5">预期准确率</p>
+    <p class="v" data-page-node-id="qHmDTUk705YtDqlzOMZ3Uc">≈ 100%</p>
+    <p class="s" data-page-node-id="wDhaXdHCVQKJQzIlFeSfSa">已由真值验证：读数全部正确，零丢弃</p>
+  </div>
+  <div class="card" data-page-node-id="zWGCQmJfAJk6f2ltiYVve4">
+    <p class="k" data-page-node-id="eE23OA903ykJRbrxtMOB2k">最大风险</p>
+    <p class="v" data-page-node-id="j8JLP16T1TI3XBgkzZTGRN">分辨率裕量</p>
+    <p class="s" data-page-node-id="BRLLhwdGqU0egnEyqfbM5Z">笔画宽仅 8–9 px，建议放大 2.5–3 倍</p>
+  </div>
+</div>
+
+<div class="callout c-teal" data-page-node-id="lO6dn8UGuDgBC5RMX9vIIZ">
+  <p data-page-node-id="DGC6ts42tNhsz1DrdZgZkA"><span class="t" data-page-node-id="4MUpx7dR4O7itLkSpJG8me">三句话版本</span></p>
+  <p data-page-node-id="2dE5iiKvvAzaoAcq9HAsCD">0. <strong data-page-node-id="HY66LyGZ7KSXUqcBOeEBfR">命令都要加 <code data-page-node-id="mbcu4mdd8d6gQFZRI55QUV">--no-exposure-write</code></strong>。这台相机的驱动一写曝光属性画面就变纯白（已在真机上定位，见第 12 节），不写就一切正常。</p>
+  <p data-page-node-id="FqDtyzFZugZIH8riCvgyA5">1. <strong data-page-node-id="Dx6yXdKwrdcC2UeD70Dbg4">曝光给 20–50 ms，把帧率降到 5 fps</strong>。UVC 的曝光时长受帧周期限制，不降帧率就设不进去。若曝光不可写，就用相机自动曝光——暗场景下它本来就会拉长。</p>
+  <p data-page-node-id="67W9Bg9YBnM9FfAbWaseBA">2. <strong data-page-node-id="WiyGEsTHAuABuJT2EioJ2m">曝光必须能手动调</strong>：OpenCV 写曝光属性会把画面打坏，但<strong data-page-node-id="2WJG5CwapwcZIlPAYDTCV0">驱动原生属性页可以</strong>（见第 12 节）。自动曝光在这个「暗背景 + 一小块极亮」的场景下必然把 LED 打爆 —— 它测的是整幅画面的平均，画面主体越暗，越要把那一小块推爆。</p>
+  <p data-page-node-id="4SmYll49MDrUH9CMahJ4PG">3. <strong data-page-node-id="NDJ24tfEBCTZxopxLipVGa">按段判读，不要整字 OCR</strong>：对每个数字的每段单独取平均灰度，与阈值比较得段码，再查表映射为数字——左位只需判 b/c 两段。</p>
+</div>
+
+<h2 data-page-node-id="8HW0Tw9aJ4zQEMjhyDnj9g"><span class="n" data-page-node-id="y9P9hkKbggy8WCHA3yR7JP">01</span>识别空间只有 101 种合法图案</h2>
+
+<p data-page-node-id="3PraG18Cv7pbuh51s3TbPo">你补充的"最左位只有两个段"这条信息价值很大，它带来一个强约束：<strong data-page-node-id="cltZOOZQjk7kENTZhLE8nE">左位在物理上不可能显示 0，所以数值小于 100 时它只能熄灭</strong>——这块屏不存在"固定显示三位"的可能。把 0–100 逐个数出来，合法显示图案恰好 101 种：</p>
+
+<table data-page-node-id="QxNBDeCa9nIvKH6LkArLTC">
+  <thead data-page-node-id="5NNsnqi3JPx1vbJEWbSsp6"><tr data-page-node-id="EJiQwAFQrcH6s7fO9e8YSb"><th data-page-node-id="VpnB44OyDybD4vwuQzZ4UF">数值区间</th><th data-page-node-id="nqaDIM73WHamy3HxCc5m6C">显示形态</th><th data-page-node-id="30kmDMtmC3BozBka007yKX">组合数</th></tr></thead>
+  <tbody data-page-node-id="EEq57XFzw5CERrCovSYcca">
+    <tr data-page-node-id="jaHBygutGcxGakQTYc7TGh"><td class="num" data-page-node-id="OXDX46PEX2NjhxlZvpC7fU">0 – 9</td><td data-page-node-id="JJa2l22c98pRnwHgBbtVhv">左位空 · 中位空或 0 · 右位 0–9</td><td class="num" data-page-node-id="DSoa47ZsmxncwQSlxTmEGa">10</td></tr>
+    <tr data-page-node-id="BZw0k5s8szEVuHGFZccQHj"><td class="num" data-page-node-id="NHYvyYfKqBAK5U8gWrldk0">10 – 99</td><td data-page-node-id="nAOgLqJl1CZDkb7GMgEw0x">左位空 · 中位 1–9 · 右位 0–9</td><td class="num" data-page-node-id="E1CuMtwzSeN2a1XOmkSlCg">90</td></tr>
+    <tr data-page-node-id="KutF0YqTVNrxbZVvdEhGBM"><td class="num" data-page-node-id="hDTNYnvRiRFBYD2Yh6EO4M">100</td><td data-page-node-id="2IBykn9wFwLWIE8fohbIIY">左位 1 · 中位 0 · 右位 0</td><td class="num" data-page-node-id="5elkZOyWvXajfPRGnqr1Ub">1</td></tr>
+    <tr data-page-node-id="JqMhfWmsNE0CdvOuYkrqSL"><td colspan="2" data-page-node-id="9jPAROxw02aXa9p7rq2zhU"><strong data-page-node-id="AnLYuwIJQvowV2v93ngb0V">合计合法图案</strong></td><td class="num" data-page-node-id="dwsktiFtSgyeETXhwDAwJv"><strong data-page-node-id="aOvajfBJY6RqPZDLdz1pLM">101</strong></td></tr>
+  </tbody>
+</table>
+
+<p data-page-node-id="Z6L9bmE0mqOlkCokfIGB5T">而三位的原始状态空间是 2 × 11 × 10 = 220 种（左位：空白 / 1；中位：空白 / 0–9；右位：0–9）。<strong data-page-node-id="4FG69Qcci3D0xvW5YX7Lbl">超过一半的状态组合在物理上不可能出现，任何一次误判都有很高概率落进这个"不可能区"被当场逮住。</strong>这条约束比后端加置信度打分可靠得多，是这套方案准确率的主要来源。</p>
+
+<div class="callout c-teal" data-page-node-id="hIkc9TI3NKGpMi8IVoTXbF">
+  <p data-page-node-id="O6D3zT5cmK6gMHiuuHz3DR"><span class="t" data-page-node-id="ZGwumx2H8mInO17m6O7QqM">已确认：中位在 0–9 时消隐，不显示 0</span></p>
+  <p data-page-node-id="q5u7W2vodMPyRzH83BpG9v">实测确认：数值 0–9 时中位<strong data-page-node-id="w23MpH1mPZRt2EAwgesxL9">消隐</strong>；只有到 <strong data-page-node-id="QEo4OSBLuKfn3GZj1UJKiB">100</strong> 时中位才显示 0。也就是说这块屏上唯一会出现「0」的十位状态，就是 100。</p>
+  <p data-page-node-id="5GNUKJnUVuW5o9A2gXWAJh">这带来一条额外的校验规则：<strong data-page-node-id="c9i1gfrYCjitJrfeIxRSa3">非 100 的情况下如果读出「十位 = 0」，应直接判为误读并丢弃。</strong>这条规则不需要任何额外硬件，纯粹来自屏的物理约束。</p>
+</div>
+
+<div class="callout c-amber" data-page-node-id="JFALHAGBAidxsAcyXUoDfc">
+  <p data-page-node-id="RcUpRNlwTNV4lIQ54VQ0ox"><span class="t" data-page-node-id="M3IMch7q4gqjV8eLE4dFqn">顺带说明照片里的 188</span></p>
+  <p data-page-node-id="4UYKjFjaJ7KLjynLyuov9o">那是上电自检的全段点亮态，不是真实电量。<strong data-page-node-id="ZAzBHQf9me4NwV38XsFm3Z">它是标定用的完美标板</strong>——用它对齐段 ROI、确认"全亮时每段都判为亮"，比拿着会变的读数慢慢调省事得多。注意此时左位只亮 b、c 两段，其余段本来就熄灭，属于正常现象。</p>
+</div>
+
+<h2 data-page-node-id="D5oNAGdtDjtV6QHBNpCusc"><span class="n" data-page-node-id="TBVbQIPjUZI74A8lEujhLv">02</span>采集方案：长曝光积分</h2>
+
+<h3 data-page-node-id="LcMckNcX35NBqRinZYUcOY">为什么不选别的</h3>
+<ul data-page-node-id="ZRijLKSyzDDphsmCPIEEWY">
+  <li data-page-node-id="jYU8NO94ejtVqKv9AWB92D"><strong data-page-node-id="GN9M7XvDZHQw61xQ5fFDvC">方案 D（采电信号）已排除</strong>——你明确只能拍照，不能接触接线。</li>
+  <li data-page-node-id="6ySgBDy5yYiWkBjEotZkPv"><strong data-page-node-id="3ja9DT5k6RxCVBLfEbhZDo">方案 C（高速连拍 + 多帧融合）暂时不需要</strong>——被测物静止，没有运动模糊，也就没有把曝光压到 0.1 ms 的理由。</li>
+  <li data-page-node-id="pdl4NlGcjhKWH5QMuyqpL3"><strong data-page-node-id="ue5AHmQLYTi0y4OOlZZsXr">方案 B（频率对齐）仅在一种情况下需要</strong>——如果你后续要拿灰度值做比较（比如判断 LED 亮度随电量下降），那才需要测出刷新频率 f 并把曝光锁成 T = n/f 的整数倍。只输出数字的话，A 就够。</li>
+</ul>
+
+<h3 data-page-node-id="pxnlJ61YPdEnTQWoOKCCYd">核心参数</h3>
+<table data-page-node-id="dKEA7RfVA6DwO6a9FK9Nmr">
+  <thead data-page-node-id="8NB7nTgQLJuFPV8MbC5HsB"><tr data-page-node-id="cXIrPJdoQ2fwdmI9WJJD95"><th data-page-node-id="5OhNmv4MUIVNWSj4eoxUB6">参数</th><th data-page-node-id="vB6vP1suaI4kg8mxN3wvGl">设置值</th><th data-page-node-id="2RnSimoGl9yjCWFd4c6nA9">说明</th></tr></thead>
+  <tbody data-page-node-id="NNhjSmlFD7BswJ29ifdAhi">
+    <tr data-page-node-id="6pfRW002YhCRH0Bw8Zsp6f"><td data-page-node-id="OnHGHkgD6YF9I7dqqAZ5LW">分辨率</td><td class="num" data-page-node-id="rG3PKTQk7uIDabeRvgxVFA">1280 × 720</td><td data-page-node-id="cQsnpJUePGW05vqff8Jhx0">够用，不需要更高</td></tr>
+    <tr data-page-node-id="iMYSQZ5PgZtZBn5Zu1DOC0"><td data-page-node-id="DllTTa0ZxA3yOwdf96J8qW">帧率</td><td class="num" data-page-node-id="kFo3jLnbUWk0tAxvdzDa8X">先降后设：2 – 5 fps</td><td data-page-node-id="9PRHrQUXo5fMm0yilyag5f"><strong data-page-node-id="e62Wa9Y8mkPnkiEcVwCUJ0">顺序不能反</strong>，见下方警告</td></tr>
+    <tr data-page-node-id="TtD0QkMy5GYd2hQF4XDw9G"><td data-page-node-id="QDGkY4pZyyajoRAwvl0zM3">曝光</td><td class="num" data-page-node-id="CqGDclRhL7u91Gw7KUGHWz">20 – 50 ms</td><td data-page-node-id="hw17lKdQfCrtrBSj4qFbxa">必须 ≥ 一个完整刷新周期</td></tr>
+    <tr data-page-node-id="74upKbuPTaZPkK6HGD3qeR"><td data-page-node-id="Ow5eozuOgEopNH8qFBAL1C">增益</td><td class="num" data-page-node-id="iPbbv2ilS7tRufBaHFGRAW">最低</td><td data-page-node-id="h40W4rYWdVtcTBSKfvcQxV">长曝光不缺光，噪声优先</td></tr>
+    <tr data-page-node-id="93Xaxc3N9F0Tx1WIRcEMQW"><td data-page-node-id="cAPatff0DDbh35NZyJk5Le">输出格式</td><td class="num" data-page-node-id="4HP8e3f6HeG6y44dyWKv8q">未压缩 YUY2 / 取 Y 通道</td><td data-page-node-id="1MZuuSVKmNNUQg27D0CDSM">避开 MJPEG 在 LED 边缘的振铃</td></tr>
+    <tr data-page-node-id="V8P1BItCbs7gJAEof5Tp3k"><td data-page-node-id="xNYXDxDRp2gJ4R4VTjgTw5">采集帧数</td><td class="num" data-page-node-id="X5CHq4Q9lht73ilxKGBa6o">3 帧取 mean</td><td data-page-node-id="NF2yCBqBlEukNqv6zNUe25">静态场景用 mean（已是默认）。实测：max 成功率 33%，mean 100%</td></tr>
+    <tr data-page-node-id="aLXma7cCrFErMELl9fywR0"><td data-page-node-id="1MB6dtzmfa9yzOrjfHMF1G">减光</td><td class="num" data-page-node-id="9DCngWADpurDwuALw4juAf">按需（ND / 收光圈）</td><td data-page-node-id="48ROwtlfqb5TUjLSLxGu4d">目标是「灭段够暗、亮灭空档够大」，不是某个固定灰度值</td></tr>
+  </tbody>
+</table>
+
+<div class="callout c-red" data-page-node-id="2GyOvNbI6uw4lQosy7FI7q">
+  <p data-page-node-id="jNp5XxE6PVECEELb6Yp1gg"><span class="t" data-page-node-id="68yjtMs2NR6y92OLhpOOmz">最容易踩的坑：UVC 曝光时长受帧周期限制</span></p>
+  <p data-page-node-id="5YjDKPlEho8PLrBJa7EzQ5">绝大多数 UVC 相机在 30 fps 下，曝光值最高只能设到 1/30 s ≈ 33 ms，而且不少固件会直接钳位在 1/60 s。所以正确顺序是：<strong data-page-node-id="roxB8rbfMpgwCopghcERMN">先把帧率降到 2–5 fps，再设 20–50 ms 的曝光</strong>。反过来做，你会看到"参数写进去了但画面还是老样子"。</p>
+  <p data-page-node-id="XVWDBaqvEW5Dlv5s78vgUV">另外各驱动对曝光数值的单位理解不一致（有的用 100 µs 为单位，有的用 log₂ 秒），所以方案里我不写死数值——配套脚本提供了 <code data-page-node-id="45L0qjBqrrfCGXdQVYMHlK">probe</code> 模式，扫一遍曝光值把每档的实测亮度和判读结果打出来，你按实测挑一档即可。</p>
+</div>
+
+<h3 data-page-node-id="seJZUz601nr3Jey0TuIgJy">顺手把带宽问题也解决了</h3>
+<p data-page-node-id="sIugPZhZ0reMKfpH8wPrpt">1280×720 未压缩 YUY2 单帧约 1.84 MB。若按 30 fps 跑，带宽需求约 55 MB/s，已超 USB 2.0 上限；降到 5 fps 后只需约 9 MB/s，绰绰有余。<strong data-page-node-id="z0LjHdMACiNdkv7cWDmU7X">降帧率既是为了让长曝光生效，也顺带解决了带宽</strong>，一举两得。静态场景 0.2–0.5 s 出一次读数完全够用。</p>
+
+<h2 data-page-node-id="vnEzJ2YMnfdHCuOkQDdwjD"><span class="n" data-page-node-id="2XnjoEo6nF41QyhgreGYBz">03</span>光学与减光（这一步别省）</h2>
+
+<h3 data-page-node-id="U2m478gNPChfLiUYCzu6py">必须做</h3>
+<ul data-page-node-id="4G555kw70sj8dPAneUFs9v">
+  <li data-page-node-id="39LJNxXXKV2WWi3HOAImAI"><span class="tag must" data-page-node-id="ds0kBbQ1acQy4qB5V04arJ">必须</span><strong data-page-node-id="QRFl9RUszwUi65cy1EBFVK">窄带蓝光滤光片</strong>（中心 ~460 nm、带宽 ±20 nm）。你的原始照片里背景是纸箱、塑料瓶和货架，不加滤光片的话阈值分割会被背景干扰得很厉害。加完之后画面里几乎只剩 LED，本质上是接近二值化的高对比图像——这是准确率最大的单一贡献项。</li>
+  <li data-page-node-id="9sWObVVoWb54Vqq6IAVSo7"><span class="tag must" data-page-node-id="S68GEFAYHgAPeCr6h9NBUK">必须</span><strong data-page-node-id="o3dwEh4zUbcSL09CJJEhXB">减光</strong>。注意一个反直觉的点：窄带滤光片<strong data-page-node-id="OoS0cGpiiiQObpE51zBmwO">不减弱 LED 自己的光</strong>（460 nm 正在通带内），它只压环境光。所以减光必须独立解决——ND16 / ND32 减光片，或把镜头光圈收到 F8–F11，或两者组合。</li>
+  <li data-page-node-id="TmgRf5IZTaGbOOWTkFyLkF"><span class="tag must" data-page-node-id="BIAE4z7NE7A2FvpL08MDcY">必须</span><strong data-page-node-id="ztj61OtUpFd5tK0YXhW453">遮光罩</strong>。镜头与板面之间做个筒状遮挡，切断侧向杂光。照片里焊盘和丝印的反光很明显，遮光罩是最便宜的解法。</li>
+</ul>
+
+<h3 data-page-node-id="TtXKS0BsW4jXn3m66vBDD1">顺手做</h3>
+<ul data-page-node-id="OKPHcUC9ykRZdZ9LFIjSo3">
+  <li data-page-node-id="Z4gGmddC5Lye3v33G8lBk8"><span class="tag rec" data-page-node-id="MkCeUKThFRggDzPNAwR0M1">推荐</span><strong data-page-node-id="jhAA7cliWYhJLuH3FUe6r0">固定工装</strong>。相机和被测板各自锁死位置，这样 ROI 可以一次性标定后长期复用，不需要每帧做定位和透视校正——准确率和速度都受益。</li>
+  <li data-page-node-id="56Cv9KgUQQn8asHIEAjvD7"><span class="tag opt" data-page-node-id="sZ7CYQNfBd8PNUL8BdBPjY">可选</span><strong data-page-node-id="RCJBR1vpHkeMMrvIdtfQnN">偏振片</strong>，专门压 PCB 绿油和焊盘的反光。</li>
+</ul>
+
+<h3 data-page-node-id="4aJ8JCCYKVSgBQWoezA4NW">不要做</h3>
+<ul data-page-node-id="PEG19k9LsUMqfxmnX1alDa">
+  <li data-page-node-id="HMqxwJ47B9LPA2SEXldVFe"><span class="tag must" data-page-node-id="kl9CxPrtHdvGEtjcEfWrBW">禁止</span><strong data-page-node-id="12FC8sNuOuB4yIq5f7utBO">不要加补光灯</strong>。LED 是自发光的，补光只会增加板面反光和过曝，纯粹帮倒忙。</li>
+</ul>
+
+<div class="callout c-blue" data-page-node-id="uk126RH5ZO4p4LFyFe2Dzq">
+  <p data-page-node-id="YuGnN8UypGaegbAKAok32q"><span class="t" data-page-node-id="blGf397G1Y3ApdvHLrdpWk">亮度怎么调：优先改曝光，减光是备选</span></p>
+  <p data-page-node-id="IyfEDOeSxvAHGmY1lCjptv">早期判断是「必须靠 ND 减光」。实测之后修正：<strong data-page-node-id="QTDmB989P8cvrastm2vJdp">这块相机的曝光可以通过驱动原生属性页手动调</strong>（见第 12 节），改曝光比加减光片快得多。</p>
+  <p data-page-node-id="w5STiFDJCWCpcG722i9bMW">而且 ND 有个反效果：自动曝光发现画面变暗后会<strong data-page-node-id="FjEDY6SqlpVYS74e4opyqQ">继续加曝光补回去</strong>，它的目标是整幅画面的平均亮度，不会因为加了 ND 就停下来。</p>
+  <p data-page-node-id="SrIpzFUuTznbuX2tbbOwNx">所以顺序是：① 驱动属性页手动设曝光 → ② 不够再收光圈 → ③ 最后才考虑 ND。</p>
+</div>
+
+<div class="callout c-red" data-page-node-id="R8hOrxNoZw4AEmnunNWiIJ">
+  <p data-page-node-id="MzD41YmuotlpGh5cch1nLq"><span class="t" data-page-node-id="UvfR3daQ58wG4Zt4FmHFIL">更正：窄带滤光片解决不了过曝</span></p>
+  <p data-page-node-id="pnoeyeFdaROi2xgoyGWAsi">早期方案里写过「装窄带滤光片后自动曝光只剩 LED 可测、过曝会自己消失」。<strong data-page-node-id="BBCd9s6FoSsbzUSf4i0vhf">这个判断是错的，在此更正。</strong></p>
+  <p data-page-node-id="3dAb1yv4oBhgCQvlhIrkiZ">滤光片把环境光压暗之后，自动曝光会发现整幅画面变暗，<strong data-page-node-id="uH4OqqL7DDCHUDboqec0m2">于是继续加曝光</strong> —— LED 反而更溢出。它改善的是<strong data-page-node-id="PUxnJWLNiJ7KOgZNYMBOfA">LED 相对背景的对比度</strong>，不是绝对亮度。</p>
+  <p data-page-node-id="LdNCmkF5AhkDUxGqeUW4Ir">滤光片仍然值得装，但它的价值是<strong data-page-node-id="4cvE1ERhIVcezMkYry3Yhy">抗环境光变化</strong>（开灯关灯读数不变），过曝必须靠手动曝光或减光解决，两件事别混。</p>
+</div>
+
+<h2 data-page-node-id="MES2Lb2aDIgxZW2n9s77TD"><span class="n" data-page-node-id="Bp8zIAiSHIkLPcMV4c0dwa">04</span>镜头焦距怎么定</h2>
+
+<p data-page-node-id="wiz1AxfY2e1oVdCyI9LxST">DCXG100 有 2.1 mm 到 16 mm 多档镜头可选。目标视野：3 位 0.36 英寸数码管总宽约 22 mm，加上安装余量，建议视野宽 <strong data-page-node-id="VHyBFmLZnStQQTVdr3Xjer">40–60 mm</strong>。</p>
+
+<p data-page-node-id="OIGulI9PCHwNogOMxN7cbx">不用去查传感器靶面尺寸，直接用实测反推最简单：</p>
+
+<pre data-page-node-id="nSGGstTgwtG1ZPNILlsSEP"><code data-page-node-id="ZjfqoNSEK0exxP2c7FSOVR">需要的焦距 = 当前镜头焦距 × 实测视野宽度 ÷ 目标视野宽度
+
+例：手头 3.6 mm 镜头实测视野宽度 250 mm
+    → 需要焦距 ≈ 3.6 × 250 ÷ 50 = 18 mm  ← 太大，换更远的工位或选长焦镜头
+例：手头 8 mm 镜头实测视野宽度 90 mm
+    → 需要焦距 ≈ 8 × 90 ÷ 50 = 14.4 mm</code></pre>
+
+<p data-page-node-id="4uiMrLBx1ETAqkEpYLgAne">或者反过来，镜头不动、调工作距离。1280 px 覆盖 50 mm 视野 = 25.6 px/mm，单个段长约 5 mm，对应约 130 px 长的 ROI——<strong data-page-node-id="sh1HJohf5787LmdbBu63Cr">分辨率完全不是瓶颈</strong>，即使视野放到 150 mm 宽，每段仍有 40 px 以上，够用。所以镜头选择上优先保证"无畸变 + 视场够"，不必追求高倍率。</p>
+
+<p data-page-node-id="ty8DGfYA4otCkQtWnKQtV3">厂商宣称全系无畸变镜头，实测四角直线度误差 &lt; 0.5%。固定安装后标定一次即可，日常不需要重复做透视校正。</p>
+
+<h2 data-page-node-id="CZsLXYfCJ6LwyJaJ7X7mMS"><span class="n" data-page-node-id="flNmQTnZ8eBWRNQj22mJ0N">05</span>标定流程</h2>
+
+<div class="callout c-blue" data-page-node-id="bMeZZTjv0GpoItgL8NIcth">
+  <p data-page-node-id="DU2zlW78SXke7X1fkzHPdp"><span class="t" data-page-node-id="blZR7pd8CAS9haQQHkgZ2z">先记住这一条：找曝光必须在标定之前</span></p>
+  <p data-page-node-id="sJtjLOPjJGopHN0fIgjYvU">因为要<strong data-page-node-id="EKNOgdHh9mF1UVEnF4yltf">先看得清，才能框准 ROI</strong>。所以 <code data-page-node-id="cdGqErTEDaCsO8BDbrduAk">probe</code>（找曝光）被设计成<strong data-page-node-id="6F4aD5OhIjXTgfyAPbMdCF">不需要模板</strong>就能跑，它只报告图像统计；等你标定完，同一个命令会自动附带判读结果。</p>
+</div>
+
+<pre data-page-node-id="yMqKzDTqFWgZGUPWeQsNEd" style="white-space: pre-wrap;"><code data-page-node-id="NAtQNkUfcabBKdglspXalI" style="white-space: pre-wrap; cursor: text;">py seg7_reader.py                       # 不带参数：打印推荐执行顺序
+py seg7_reader.py snap                  # 0) 抓一张图看看拍到了什么（最常用的第一步）
+py seg7_reader.py snap --image a.png    #    指定文件名 / --camera 1 换设备号
+py seg7_reader.py selftest              # 1) 不接相机，先验算法
+py seg7_reader.py diagnose              # 2) 找设备号 / 画面异常时排查
+py seg7_reader.py probe                 # 3) 看当前画面亮度，判断要不要减光
+py seg7_reader.py --props --camera 0    # 4）调整曝光
+py seg7_reader.py calib                 # 5) 框选三个数字，生成模板
+py seg7_reader.py read --template seg7_roi.json   # 5) 日常读数
+py seg7_reader.py read --template seg7_roi.json --every 60 --csv battery_log.csv --stop-at 100 0
+# 6）every (采集间隔)
+
+</code></pre>
+
+<div class="callout c-amber" data-page-node-id="zIGXZXfvwMHFAdQufWhBh7">
+  <p data-page-node-id="1yVXnSOSyInpwl8JBNKIKH"><span class="t" data-page-node-id="R0pzgKpmMDsLEYtSnmm5gG">不需要再手动加 --no-exposure-write</span></p>
+  <p data-page-node-id="guJVkZRUn7tHhVTMWfoCGX">因为这台相机的驱动一写曝光属性画面就变纯白，工具已经把<strong data-page-node-id="N3JTaBflnYjxNIP3OYYhYC">不写曝光属性设为默认</strong>。只有确认某台相机支持手动曝光时，才加 <code data-page-node-id="jB860zsJw134tKFuvx7Z68">--exposure-write</code> 显式打开。<code data-page-node-id="XIG74ODRgnlJRoGT9E5Ulh">--no-exposure-write</code> 仍然接受，但加不加都一样。</p>
+</div>
+
+<ol data-page-node-id="iv1MDoFXbRv1368l4tacJ7">
+  <li data-page-node-id="XR41rKlYu32xlmMWxUsCU8"><strong data-page-node-id="JFV6DvugdsBz6HEgMo4Hbf">先跑离线自检，确认算法没问题。</strong>不需要相机，脚本会合成数码管图像把整条判读链路跑一遍：
+    <pre data-page-node-id="1mUmudfBJlxI7IhO2mw4CX"><code data-page-node-id="itKpyyzAn66AZWeR1ooVBr">py seg7_reader.py selftest</code></pre>
+    若显示"全部通过"（17 项），说明几何切段、阈值判定、段码译码、越界拦截都正常，后面出问题就只可能是采集参数。</li>
+  <li data-page-node-id="H7sanO87CNj6rkgKE8mdzb"><strong data-page-node-id="2FBsfQPOkEFcMPque6fNmD">上电，进入自检全亮态（188）。</strong>左位只亮 b、c，中位和右位 7 段全亮。</li>
+  <li data-page-node-id="OpkUr6bDRLs40p0hJTCtD8"><strong data-page-node-id="J2nT0uO44w5Zx9ulFEYijP">装窄带蓝光滤光片。</strong>先装它，再看还需不需要 ND —— 它同时能纠正自动曝光的测光（见第 03 节）。实拍经验：不装滤光片时数码管会糊成一片白，装了之后自动曝光才有机会对准 LED。</li>
+  <li data-page-node-id="dGmx5IVjJkTurZJR2cZ5I0"><strong data-page-node-id="47JihFNXGN2MhD7C5izhka">调焦并收窄视野。</strong>让中位 / 右位的段边界清晰锐利、不糊不晕；同时把 3 位数字控制在画面宽度的 20–40%（太远每段只剩十几个像素，太近又装不下）。</li>
+  <li data-page-node-id="Q0SFImd7elndXNB17B7fuF"><strong data-page-node-id="qDIC6vF14Ksa5yxtQxHpb9">看当前亮度。</strong>运行 <code data-page-node-id="DrCDHMBLWfOpY8UUn5HuK0">py seg7_reader.py probe</code>。注意：probe 的均值 / 饱和占比是<strong data-page-node-id="nQtdOG8smbQmcznvyxfnCT">整幅画面</strong>统计，反映的是背景而不是 LED，所以它只能做粗筛。真正的验收判据在 ROI 标定完之后 —— 用 <code data-page-node-id="wdfCO1bV1uCFZIIVLATg0Q">read --debug</code> 看<strong data-page-node-id="yIEdGFy5MMLfEZba7UBKT3">段级灰度的分布</strong>：灭段够不够暗、亮灭之间的空档够不够大。</li>
+  <li data-page-node-id="B6PgQfpEWHIzfwOkH6j8tO"><strong data-page-node-id="DJz6JSPP6FI7riaa9ZY0eh">标 ROI。</strong>运行 <code data-page-node-id="VUi64btbKCWr31ErgAEG4p">py seg7_reader.py calib</code>，依次在画面上框住左、中、右三个数字的外接矩形。脚本按标准 7 段几何自动切出各段子区域（左位只保留 b、c），并生成一张叠加预览图。</li>
+  <li data-page-node-id="u2D1xwjhGNbLSpNYzG6jON"><strong data-page-node-id="zxPLIU49KCAHQ0jZJteTeJ">核对叠加图。</strong>确认每个段的采样框都落在笔画正中间、没有越界到相邻段或间隙。不满意就调 <code data-page-node-id="IiDP9V0tdqA7qKMQZNIvbB">--thickness</code>（笔画粗细占比，默认 0.14）和 <code data-page-node-id="celSvdsYOEL5TlosAeLUie">--shrink</code>（采样框内缩比例，默认 0.18）重来，或直接手改生成的 JSON。</li>
+  <li data-page-node-id="zZ7jNUhif3RQZCJrvwHRo6"><strong data-page-node-id="4rFdPzVuB8KdrTypLgB0KW">验证阈值裕量。</strong>在全亮态运行 <code data-page-node-id="WqLb6MfTExkTCt18Y0gUcX">read --debug</code>，脚本会打印每段的实测平均灰度和判定结果。确认全亮时每段都判为"亮"，且裕量充足（亮段实测值 ≥ 阈值 2 倍以上）。</li>
+</ol>
+
+<h3 data-page-node-id="bxPvaprdTVMmUiG2PKLKmg">日常读数</h3>
+<pre data-page-node-id="mgAY0Czf6gdsupqa9US00e"><code data-page-node-id="oHEn0niB5ADJBqZ8FIzz9O"># 连续 3 帧读数一致才输出，避免瞬时误判
+py seg7_reader.py read --template seg7_roi.json --frames 3 --agree 3
+
+# 持续监视，并把标注图存档
+py seg7_reader.py read --template seg7_roi.json --watch --save-debug shot.png</code></pre>
+
+<h3 data-page-node-id="jTut9ahBEG8ULQYDd5lglQ">周期性采集（长时记录放电曲线）</h3>
+
+<p data-page-node-id="sJmNvElD22OCLYQ4A4F2d0">这块屏显示的是电量百分比、变化速率约 1%/分钟，所以"记录一段放电曲线"是很自然的用法。与其在外面套一个每分钟调一次脚本的循环，<strong data-page-node-id="d7Se6clc3TXk3LrZlbkKeF">直接在 read 里做周期采集更省事也更稳</strong> —— 相机全程只打开一次，避开了这个驱动对反复开关敏感的问题。</p>
+
+<pre data-page-node-id="rjAuz7S4Ihgrp0QIKVdcjc"><code data-page-node-id="HHnyzCdDejIF3wWoa5V3d4"># 每 60 秒采一次，写进 CSV，读到 100 或 0 连续 5 次就自动收工
+py seg7_reader.py read --template seg7_roi.json --every 60 \
+    --csv battery_log.csv --stop-at 100 0
+
+# 每 5 分钟一次，跑满 12 轮（1 小时）就停
+py seg7_reader.py read --template seg7_roi.json --every 5m --count 12 --csv log.csv</code></pre>
+
+<table data-page-node-id="vTR2PX0TJiYQAvHxFQawbx">
+  <thead data-page-node-id="c0ExRexWqRfqg7fQ94jSAC"><tr data-page-node-id="Gse9XJ5GQS90OLKuve6CLj"><th data-page-node-id="G0sSTME9AGmpuZ9KsjqRge">参数</th><th data-page-node-id="asDOl33CB9ilvhkuYIvOiH">说明</th></tr></thead>
+  <tbody data-page-node-id="IDWdYIyc5D4YcxGHAyxb0R">
+    <tr data-page-node-id="VomDs0FbPMvFeDAwMpEGX4"><td data-page-node-id="M3mFtLtar3rGaDPhT2LO2z"><code data-page-node-id="vnFym55QFq162AOY7ngT5T">--every</code></td><td data-page-node-id="0GkkoGs0wIxtcdUFLcktQU">采集间隔，支持 <code data-page-node-id="lLYwR7xDgTUy1tkXB9XZgF">60</code> / <code data-page-node-id="xjYc5Gf5MvAsL8wDFuxUZf">60s</code> / <code data-page-node-id="ymUzwHHsRpi1v5a5vf48mk">1m</code> / <code data-page-node-id="ViYZxfZLQpIb7WMNXRy12f">5m</code> / <code data-page-node-id="ER3jBmnF6pleWklo8DGBeT">2h</code>。<strong data-page-node-id="Ba7lQwRzrG7EL7CcUVDDdR">设了它自动持续运行</strong>，不用再加 <code data-page-node-id="lOKfTwvsWeILe8LYSiUI0e">--watch</code></td></tr>
+    <tr data-page-node-id="YQo3HamwY1HEztJuNzc25f"><td data-page-node-id="BZVw35NE7fRDvuo371O16G"><code data-page-node-id="hJlqZbUAu6c31fFPrtWIMI">--csv</code></td><td data-page-node-id="eZO1MRIBU7N9YzZzFmE4Ec">每轮追加一行「时间,电量」；文件不存在时自动写表头（带 BOM，Excel 打开不乱码）。失败的轮次写空值行，便于看出断点</td></tr>
+    <tr data-page-node-id="6gN61Gqu7mLWTGOZOUNfFV"><td data-page-node-id="1UW83mKREkrXg3hgjhd7DH"><code data-page-node-id="IZsCaaVnnA8LzkBL3lN45a">--stop-at</code></td><td data-page-node-id="b59EMkAi0wGYd8vnblrUyt">连续读到这些值就自动终止，可给多个：<code data-page-node-id="FKn03dOtlzwYbdxbllSetb">--stop-at 100 0</code></td></tr>
+    <tr data-page-node-id="0QWvTMcydLwcwFYToKXmGz"><td data-page-node-id="PWenrx4r0ckRD1jnupR7yU"><code data-page-node-id="GlmqFCRyrHPFCqm81r0JYL">--stop-streak</code></td><td data-page-node-id="9eAUimL8C0AP9oQtrI6Uuq">需要连续命中几次才终止，默认 <strong data-page-node-id="nB7cP6feLaQF3FQKsN64Cl">5</strong></td></tr>
+    <tr data-page-node-id="r4LFtNFBkp0aBj7Ix6oiJI"><td data-page-node-id="H1Hb97nQEK635N0moBBsSO"><code data-page-node-id="3Mzc0AIdpjjeiDtcErM6kZ">--count</code></td><td data-page-node-id="6OsMXqAILOXz8r6gFKPA4H">跑满 N 轮后退出，0 = 不限</td></tr>
+  </tbody>
+</table>
+
+<p data-page-node-id="3vLNLPrKTwO7EeJrVh4Ha4">运行时会直接把进度标在读数行上，不用猜还差几次：</p>
+
+<pre data-page-node-id="RFXslC6dZjYzg8PJSipKuM"><code data-page-node-id="8Zxnw8dsknx7FPcH4YIHyr">[周期] 每 60 秒一次，Ctrl+C 停止
+[终止] 连续 5 次读到 0 或 100 时自动结束
+[日志] 追加写入 ...\battery_log.csv
+[读数]  13（原始 '13'）连续一致 3/3 ｜ 命中 13: 1/5</code></pre>
+
+<p data-page-node-id="k8YSrBPtMXV9ABxHQFRKMX"><strong data-page-node-id="goaFMAxkFIDpxv4aqH9lvS">三个容易踩的点</strong></p>
+
+<ul data-page-node-id="iUKmjLWaB1pE1L7WwFB0OX">
+  <li data-page-node-id="ajs6nN3SRQE9MoWaU8AnSP"><strong data-page-node-id="VwGF4L2Ho8HKuRr8dqRBEK">节奏是「严格间隔」，不是「采集完再等」。</strong>单次采集本身要花 3–5 秒，如果按"跑完睡 60 秒"算，实际会变成 65 秒一次、越跑越偏。现在睡的是「间隔 − 本轮耗时」，所以是真正的每 60 秒一次。实测 2 秒间隔打出的时间戳是 16:33:49 / 51 / 53，精确对上。</li>
+  <li data-page-node-id="9hzKXMwtz8uxq39PwK0Df0"><strong data-page-node-id="ha6UBPFOVjW5ihvx0lLV27"><code data-page-node-id="ebUBE9IiUl2nxP0dpUTVFD">--every</code> 和 <code data-page-node-id="2E3eLIlAy4HBrjEAnm8HeO">--stop-at</code> 都会自动开启持续运行。</strong>否则终止条件在第一轮之后就退出了。<strong data-page-node-id="uFMU6XS7c4HasznnstoFcl">这两个参数不需要再手写 <code data-page-node-id="aaRfXQfNsvRv80C2YmGK3P">--watch</code>。</strong></li>
+  <li data-page-node-id="7I2GSLX4ECYn3kG60xBTQk"><strong data-page-node-id="Pd005uA0KfY2nz80eJ4BPs">终止条件里的「连续」怎么算：失败的轮次既不计入、也不重置已累计的次数。</strong>因为失败表示"这一轮没读到"，不代表"值变了"。所以 <code data-page-node-id="PLgI5lVGQ7oHlQOESZmQ67">100, 100, 失败, 100, 100, 100</code> 算连续 5 次 100。</li>
+</ul>
+
+<div class="callout c-amber" data-page-node-id="l7QUBPTG4j2qdJ5e5Roafn">
+  <p data-page-node-id="5ZXAVRLqHSZvrwWxVQgaV8"><span class="t" data-page-node-id="lRTEpNjKIgPRzeFR78Spfx">无人值守时的两个注意点</span></p>
+  <p data-page-node-id="fpssh7WT33qYLsMAqYWkuE">· <strong data-page-node-id="VDx694tPbuTZjfI0EWwOHE">进程挂了不会自己重启。</strong>长时采集建议用任务计划程序来触发这一条命令 —— <strong data-page-node-id="jcFc1CW2fJRJbjjnPokJBV">触发条件选「登录时」即可，不需要设 1 分钟重复</strong>，因为 <code data-page-node-id="yCQMlopCBb8XKsHWIfbMap">--every</code> 自己会管节奏；再在「设置」页勾上"如果任务失败，按以下频率重新启动"。<strong data-page-node-id="qAUWaE0yS1kWonfv1w8Uft">参数里 python 要用完整路径</strong>，任务计划程序的环境变量和终端不一样，<code data-page-node-id="2s2I38fC0wE0yzGPtsRLlm">py</code> 可能找不到。</p>
+  <p data-page-node-id="WwPRdDgAofdukUHazlxOoT">· <strong data-page-node-id="ifp2pv74DI9szhNUWfNxwf">采集期间不要让别的程序占用相机</strong>（相机预览、视频会议等），否则取帧会失败、CSV 里会出现空值行。</p>
+</div>
+
+
+<h2 data-page-node-id="yIb3HcQDTb1Z4uLVoFod1b"><span class="n" data-page-node-id="7JpP54QlPYGjSsQBqvNNv0">06</span>ROI 布局与段命名</h2>
+
+<figure data-page-node-id="mNdpsDYmLZDu8FIss2bhFl">
+<svg viewBox="0 0 780 260" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" data-page-node-id="uC5N6VMMCs8Eajpnzv7Td8">
+  <title>三位数码管的段命名与 ROI 划分</title>
+  <desc data-page-node-id="Bc2lx4DjDOZPzklHgREoMB">左位为半位只含 b、c 两段，中位和右位为标准七段，各段标注 a 到 g。</desc>
+
+  <rect x="30" y="40" width="180" height="180" rx="10" fill="#e6f1fb" stroke="#185fa5" stroke-width="0.5" stroke-dasharray="5 4" data-page-node-id="9GobwROrSZHxaRRtbJ9EH9"></rect>
+  <text x="120" y="28" font-size="13" font-weight="500" fill="#0c447c" text-anchor="middle" data-page-node-id="mgYWoyiBfjiG9BoywOrIna">左位 · 半位</text>
+  <text x="120" y="238" font-size="12" fill="#185fa5" text-anchor="middle" data-page-node-id="bOEnxGztRmTDuHDTEIZHzS">仅 b / c 两段 → 空白 or 1</text>
+  <rect x="105" y="76" width="16" height="60" rx="4" fill="#378add" stroke="#185fa5" stroke-width="0.5" data-page-node-id="ymGA4LslzzFpsJ0FJsFLB0"></rect>
+  <rect x="105" y="148" width="16" height="60" rx="4" fill="#378add" stroke="#185fa5" stroke-width="0.5" data-page-node-id="ca6HMhy42M6Uz9WC8aRVmG"></rect>
+  <text x="150" y="106" font-size="12" fill="#0c447c" data-page-node-id="FjPBs8cTHDmI4BKK4CNVZ9">b</text>
+  <text x="150" y="178" font-size="12" fill="#0c447c" data-page-node-id="4mQzhVjvs9xwiANE6KK7SZ">c</text>
+
+  <rect x="290" y="40" width="180" height="180" rx="10" fill="#f1efe8" stroke="#888780" stroke-width="0.5" stroke-dasharray="5 4" data-page-node-id="VDtu3EvGYwnctYLJvQmFRf"></rect>
+  <text x="380" y="28" font-size="13" font-weight="500" fill="#2c2c2a" text-anchor="middle" data-page-node-id="UtJL7J0RQd21wA39adeNfL">中位 · 十位</text>
+  <text x="380" y="238" font-size="12" fill="#5f5e5a" text-anchor="middle" data-page-node-id="VbvgYjtGqtcJ13n4VA7h4n">标准 7 段全判</text>
+  <rect x="337" y="66" width="86" height="17" rx="4" fill="#e6f1fb" stroke="#185fa5" stroke-width="0.5" data-page-node-id="2kzWDE61nuVTrHMH97i9AY"></rect>
+  <rect x="337" y="146" width="86" height="17" rx="4" fill="#e6f1fb" stroke="#185fa5" stroke-width="0.5" data-page-node-id="lQ9i08rAgmnRH9RIUCwlpt"></rect>
+  <rect x="337" y="177" width="86" height="17" rx="4" fill="#e6f1fb" stroke="#185fa5" stroke-width="0.5" data-page-node-id="50xbUaEBSoyOslo8Fw85EW"></rect>
+  <rect x="320" y="83" width="17" height="63" rx="4" fill="#e6f1fb" stroke="#185fa5" stroke-width="0.5" data-page-node-id="m8BmsDz2i6E8YpJGBXqZQw"></rect>
+  <rect x="423" y="83" width="17" height="63" rx="4" fill="#e6f1fb" stroke="#185fa5" stroke-width="0.5" data-page-node-id="FZnDiN212c4YgDpGhtVmPr"></rect>
+  <rect x="320" y="163" width="17" height="63" rx="4" fill="#e6f1fb" stroke="#185fa5" stroke-width="0.5" data-page-node-id="L7hOUksSO8s2PEL2ABIMbl"></rect>
+  <rect x="423" y="163" width="17" height="63" rx="4" fill="#e6f1fb" stroke="#185fa5" stroke-width="0.5" data-page-node-id="w5ZDfM7PP93hmlafuMN1YM"></rect>
+  <text x="380" y="60" font-size="12" fill="#0c447c" text-anchor="middle" data-page-node-id="37IxMd4nDnNF2UwRwA13vp">a</text>
+  <text x="380" y="155" font-size="12" fill="#0c447c" text-anchor="middle" data-page-node-id="WVKOnSq1RtRol5YCx98ivm">g</text>
+  <text x="380" y="190" font-size="12" fill="#0c447c" text-anchor="middle" data-page-node-id="Mb3wPiq4VPkrayMb4r7qFR">d</text>
+  <text x="310" y="116" font-size="12" fill="#0c447c" text-anchor="end" data-page-node-id="tUS0Ny7PYe0IsAAplxSpg4">f</text>
+  <text x="450" y="116" font-size="12" fill="#0c447c" data-page-node-id="zG7FIlL1eP9g7odssaXwFI">b</text>
+  <text x="310" y="196" font-size="12" fill="#0c447c" text-anchor="end" data-page-node-id="BQGPdb6R5jnMCTB6gg8TOl">e</text>
+  <text x="450" y="196" font-size="12" fill="#0c447c" data-page-node-id="9T1Dgb8kataJSAysgB9R5W">c</text>
+
+  <rect x="550" y="40" width="180" height="180" rx="10" fill="#f1efe8" stroke="#888780" stroke-width="0.5" stroke-dasharray="5 4" data-page-node-id="SAGpPoH7GaAYHmjHlt6PoF"></rect>
+  <text x="640" y="28" font-size="13" font-weight="500" fill="#2c2c2a" text-anchor="middle" data-page-node-id="LbpNpq0hAMsbuiKMEvMPC1">右位 · 个位</text>
+  <text x="640" y="238" font-size="12" fill="#5f5e5a" text-anchor="middle" data-page-node-id="gkE9A0kdh8BOWUrqfJ8azq">标准 7 段全判</text>
+  <rect x="597" y="66" width="86" height="17" rx="4" fill="#e6f1fb" stroke="#185fa5" stroke-width="0.5" data-page-node-id="sXzx2bJXiKemXKR6I0JL8S"></rect>
+  <rect x="597" y="146" width="86" height="17" rx="4" fill="#e6f1fb" stroke="#185fa5" stroke-width="0.5" data-page-node-id="xY9xQs32j58I8y0z0izbR1"></rect>
+  <rect x="597" y="177" width="86" height="17" rx="4" fill="#e6f1fb" stroke="#185fa5" stroke-width="0.5" data-page-node-id="1lsZ0bDSUDgHRx1StvjCcg"></rect>
+  <rect x="580" y="83" width="17" height="63" rx="4" fill="#e6f1fb" stroke="#185fa5" stroke-width="0.5" data-page-node-id="dUmr5vxF3zZ8MRyU3WRAd9"></rect>
+  <rect x="683" y="83" width="17" height="63" rx="4" fill="#e6f1fb" stroke="#185fa5" stroke-width="0.5" data-page-node-id="FVMUIO7BPFMOt2Hk4phzOH"></rect>
+  <rect x="580" y="163" width="17" height="63" rx="4" fill="#e6f1fb" stroke="#185fa5" stroke-width="0.5" data-page-node-id="Gy6l6bKopoj1ZNbo7RFzRT"></rect>
+  <rect x="683" y="163" width="17" height="63" rx="4" fill="#e6f1fb" stroke="#185fa5" stroke-width="0.5" data-page-node-id="VCNTpOxkNAO1lFIjhMMcNw"></rect>
+</svg>
+<figcaption data-page-node-id="AmWuhaWX4L9Fcw84qvQHLr">三个数字各框一个外接矩形，脚本按标准七段几何自动切段。左位仅保留 b、c 两个采样区。</figcaption>
+</figure>
+
+<div class="callout c-amber" data-page-node-id="ySIzQUvFnWVmt0FlMp0mYB">
+  <p data-page-node-id="8TiWfj8hBoHeoFPW59ycAW"><span class="t" data-page-node-id="MsYqnlsxrroQn7dSVzebxY">别把 POWER LEFT 和电池图标框进来</span></p>
+  <p data-page-node-id="mTh8uz4M3squSrTFXHgjxg">它们和数码管在同一块屏上。如果它们与数码管共用驱动，做 ROI 时必须排除在数字区之外，否则容易被误判成段。ROI 只框数字本身，边框留 5–10 px 余量即可。</p>
+</div>
+
+<h2 data-page-node-id="Cy8mn42DqBiH2YZApLCJiQ"><span class="n" data-page-node-id="d4NwvuYxucnsjPSM3Y2c66">07</span>判读算法</h2>
+
+<h3 data-page-node-id="DLt4nZqBtTkf5g8UUiA2hP">为什么不用通用 OCR</h3>
+<p data-page-node-id="5VYl4gJJypazFpSfy0TBwU">通用 OCR 的训练集里没有这种等宽笔画、被光晕包裹的数码管字体，亮度一漂移笔画就粘连，<code data-page-node-id="5eTOC3LumtPUyQYhZUhN85">1</code> 很容易认成 <code data-page-node-id="l7XCoXZfrEqFmf9ZXFTuNH">7</code>、<code data-page-node-id="ptmK9WGBXdKghHp6u8EHw9">5</code> 认成 <code data-page-node-id="NSVbtc08sVcZ3Mt5mliIEC">6</code>。而按段判读把问题降解成了 16 个独立的是非题（左位 2 + 中位 7 + 右位 7），每一题的裕量都很大——这是准确率的来源。</p>
+
+<h3 data-page-node-id="W2AtLjxAV7Ak0NZSAHMNmv">核心逻辑</h3>
+<pre data-page-node-id="6GGynLGRS2kQmAU9C6ploW"><code data-page-node-id="GZwQENlbEHORXkUd7yPcXk">1. 取 3 帧，逐像素取 mean 融合（抗光晕跳变与读出噪声）
+2. 在整块数字区上取 99 百分位灰度 → 作为亮段参考值 ref
+   若 ref &lt; 有效下限 → 报错"屏幕未点亮 / 相机未对准"，不出结果
+3. 阈值 thr = 0.40 × ref
+   对每个段的采样框求平均灰度 mean：
+       mean ≥ thr → 该段判为亮
+4. 把每个数字的亮段集合，与它自己的段码表比对：
+       能精确匹配 → 输出该字符
+       不能精确匹配 → 取汉明距离最近的一项，并标记为低置信
+5. 拼成 3 位字符串，做取值域校验：必须是 0–100 的整数
+6. 多帧投票：连续 N 次读数取众数，一致才输出</code></pre>
+
+<h3 data-page-node-id="P6zdDKjuH9xks35BDeZdEJ">固定阈值还是自适应阈值</h3>
+<p data-page-node-id="pT3eRnKrLlJyimpCP7zeLc">方案里用 <strong data-page-node-id="scajM9fMwYjLFKXm1OZfw0">0.40 × ref 的相对固定阈值</strong>，而不是每个数字单独做 Otsu。原因：<code data-page-node-id="BRJfCKutwtU8dCrElUyDuu">ref</code> 取自整块数字区，永远有亮段作为基准，所以相对阈值天然跟着亮度漂移走；而单个数字做 Otsu 会在它整体偏暗时（比如显示 <code data-page-node-id="WqN1PjI7XopIaHWD7lgPtE">1</code>，只有两段亮）把噪底切出随机结果。相对阈值的稳定性更好，行为也更好预测、更好调。</p>
+
+<h3 data-page-node-id="gS4UQVzaeGdGB3Q2gQf8Iz">段码表</h3>
+<table data-page-node-id="S4x1I6KuzwJyVI1Kq9QWSc">
+  <thead data-page-node-id="1zKT27ee2QGOr77NA64l4C"><tr data-page-node-id="wI1FrtuPslkisP1vf1ZAQw"><th data-page-node-id="3DrEdfUBLzXx4Sq0ALnOD8">字符</th><th data-page-node-id="WOmnPJ9fLzyzOSn2LEteRg">亮段</th><th data-page-node-id="b1CNoUq5qcX4MpmXgzACCs">字符</th><th data-page-node-id="KqR3BGhF27idy6K4tU6qFu">亮段</th></tr></thead>
+  <tbody data-page-node-id="Znps1OTPDH7IlQyCyPMc61">
+    <tr data-page-node-id="8itt3ZBrmN8PLFLOlCmDIk"><td class="num" data-page-node-id="XS9W3DZoOLFxHtoh2w67J8">0</td><td class="num" data-page-node-id="Jyc70VWVh9Glr0X9VIeXJj">a b c d e f</td><td class="num" data-page-node-id="LHeqZDE1MYHo3FGhgyy7jB">5</td><td class="num" data-page-node-id="mfo9tFVmdA93OnRkNq57E9">a c d f g</td></tr>
+    <tr data-page-node-id="e1cYD5LNM1kmteX7dYG4YE"><td class="num" data-page-node-id="duBJnlMHfJxRAA7k3uYY4k">1</td><td class="num" data-page-node-id="yMDYDideejx2IAlLplnnSr">b c</td><td class="num" data-page-node-id="vxKkJkrnm8VzkybsAD6JCh">6</td><td class="num" data-page-node-id="8hABPbx2IBiExtaDDzmihO">a c d e f g</td></tr>
+    <tr data-page-node-id="3zRckCPgv2RDrcBVk8OQ0A"><td class="num" data-page-node-id="QUDZZv4Gep216Fn8OwWTmh">2</td><td class="num" data-page-node-id="3gyqXI13t3I8aPKnUJBm4G">a b d e g</td><td class="num" data-page-node-id="ETbCaicG4kuhn0Vkvcfj8m">7</td><td class="num" data-page-node-id="FVfv2wC2wPMjcSf8pb02Xn">a b c</td></tr>
+    <tr data-page-node-id="Gf3gsO073DJDTP32T5dmGr"><td class="num" data-page-node-id="LO5jwsZFZg8fpXCxdM1xBm">3</td><td class="num" data-page-node-id="tOONAn3aJGRrf6akIVYuGz">a b c d g</td><td class="num" data-page-node-id="I41UyVQPaUJfNXPbtTkwyW">8</td><td class="num" data-page-node-id="8eiQYKBuiwir31Z9cGqTW7">a b c d e f g</td></tr>
+    <tr data-page-node-id="sZKJOKIW2lViEzoJP0JDGa"><td class="num" data-page-node-id="au3UuSkZ4Oo92VuPOlaNlY">4</td><td class="num" data-page-node-id="9Hw9A5iSyEkYeOci0FdEcB">b c f g</td><td class="num" data-page-node-id="o44rJERb5D2Nyz2uQjiqBS">9</td><td class="num" data-page-node-id="YouFDU3PQyVjGYmSwFwXUB">a b c d f g</td></tr>
+  </tbody>
+</table>
+
+<p data-page-node-id="EQOB6G439GlzIi0ff6d38g">左位的表短得多，只有两项：<code data-page-node-id="m8vFE2wTo5Z9F4uKnlZBCs">{} → 空白</code>、<code data-page-node-id="9AjvPUDGjutsHDgMhoBli7">{b, c} → 1</code>。</p>
+
+<h2 data-page-node-id="PFEW62A5k2CbDnFCM2gN6l"><span class="n" data-page-node-id="JdLMUZerY8cdp42K0yt8kp">08</span>校验规则</h2>
+
+<table data-page-node-id="bQWA63QKriuBMYXBTzqUJG">
+  <thead data-page-node-id="yVFXNHd25tlmUswRDdfwBi"><tr data-page-node-id="pidDYqurZEorXUhamOKvAb"><th data-page-node-id="pBZv38lJa7Cezd21pSu7xh">规则</th><th data-page-node-id="gde6AUiw8BGfG39vjEh3fi">触发条件</th><th data-page-node-id="jMkBEJvquIYxR4q1uFv4uZ">动作</th></tr></thead>
+  <tbody data-page-node-id="O05frloEt9VVu8DHHVj2vq">
+    <tr data-page-node-id="u2EeXq5lh7HCE2fQWUyEFf"><td data-page-node-id="w10FSD0GJUCLxZUBsRHmFm">屏幕有效性</td><td data-page-node-id="6JziZYfGUvgeRBnHqDsN80"><code data-page-node-id="Z9MImiapGeO1NzQc52CoOb">ref &lt; 有效下限</code></td><td data-page-node-id="dTEcp9SaJDKnm8UrhIAGkV">丢弃，报"未检测到点亮"</td></tr>
+    <tr data-page-node-id="Jbk85HZ4KeC4ZKErE796xE"><td data-page-node-id="SpnsPBLQjCdWdrL7V6S0T9">取值域</td><td data-page-node-id="cEevQVgLmQZXHoJMQpDbhZ">结果 ∉ [0, 100]</td><td data-page-node-id="KtbITKbyi83bxm5vEn83DV">丢弃该帧，不计入投票</td></tr>
+    <tr data-page-node-id="SN9f7NA5cb8254GgRZ0EYG"><td data-page-node-id="bnGbjd5RaoDrQE253GPhNf">半位约束</td><td data-page-node-id="9398oNXvnpug71WfsmAjuU">左位被判为 1 以外的非空白字符</td><td data-page-node-id="df0o1MWnBrx9NWcvDYAUjl">丢弃（左位物理上只能是空白或 1）</td></tr>
+    <tr data-page-node-id="RpbHiLABiTTglG9r2dCFMh"><td data-page-node-id="u2XmZ2LwGrCGhbyTrOTpe7">段码精确性</td><td data-page-node-id="r2LratwRwKqkMhKffBI5yT">亮段集合无法精确匹配表中任一项</td><td data-page-node-id="62XeJkbctf3Fx523Xt6WHu">标记低置信，取最近项；连续出现则报警</td></tr>
+    <tr data-page-node-id="hW0AmF4FJ5WhjSXY7NosaN"><td data-page-node-id="7cG1867JycLsP4kbTVVhB0">合法图案</td><td data-page-node-id="vseYKM6K6gOvRKzhoQd074">拼出的图案不在 101 种合法图案内</td><td data-page-node-id="jFR1MDm4fKGTDR6FkqlbMN">丢弃该帧，不计入投票</td></tr>
+    <tr data-page-node-id="KRI8F9A8nuq88rFJMj4e8d"><td data-page-node-id="GDco1slKBpLJG0ff489ylb">时序稳定</td><td data-page-node-id="ZtfulhqDu7EUVqun1k9xed">连续 N 帧读数不一致</td><td data-page-node-id="TVwrsSkAB9GdvbsMfOLjVR">继续采，直到连续 K 帧一致才输出</td></tr>
+  </tbody>
+</table>
+
+<p data-page-node-id="wdGMTq13vJtYdigpeUPgCf">第三条特别值得强调：<strong data-page-node-id="SgAbeCaTqMIIbO1R0RrRCB">左位只能是空白或 1，这条物理约束本身就是最强的错误检测器</strong>。实测中把一段"9"错画到左位上，会被立刻识别为不可能图案（解码为 <code data-page-node-id="kSs06G6wMEpvPfmwoEphH4">199</code> 并越界丢弃），而不是悄悄输出一个错值。这比后端加置信度打分可靠得多。</p>
+
+<h2 data-page-node-id="InqhjFUgD5klz5GzjNnfNm"><span class="n" data-page-node-id="9HxFUejqECjNOYLInJZebc">09</span>参数速查表</h2>
+
+<table data-page-node-id="bAhjnVHH9jvdupXkEIsRtx">
+  <thead data-page-node-id="cQTP1UpZ9SDXhssK9sZuGO"><tr data-page-node-id="NutWrsbTgteTU1cY3nvuEs"><th data-page-node-id="DUrIhMtXq6gxHHcHvJM0Zf">项目</th><th data-page-node-id="FOWdfa0avmEDzXcGSjiGpv">值</th><th data-page-node-id="X7yf4Wmei3HbVMH8VlhWHp">可调范围</th></tr></thead>
+  <tbody data-page-node-id="YRHfZSUql9g8rzsv9VbrRT">
+    <tr data-page-node-id="EyqjBV0MsBgzgqF1xOdyAv"><td data-page-node-id="ox9lGIqxdiGEH3rpxI9sXN">分辨率</td><td class="num" data-page-node-id="B2afNTvFJFjuz29EmC5s71">1280 × 720</td><td data-page-node-id="UuDTy3QSm9KiZEH9LkSpUk">可降</td></tr>
+    <tr data-page-node-id="D0XcYEajWBKZRItkufPxtw"><td data-page-node-id="lnHb6UvrEVT3jRDOIycVZX">帧率</td><td class="num" data-page-node-id="RCQT2v0TFTBnI84izbEzfL">5 fps</td><td data-page-node-id="BO9CjP3M9w3mS6oQEaRn9d">2 – 10</td></tr>
+    <tr data-page-node-id="xLCqk0hrgCWl3kEv0Hs8KJ"><td data-page-node-id="32mHQZQhPaFS7d9BoXkWi4">曝光</td><td class="num" data-page-node-id="tMLh6rmhuCyO4sRQf9OMmw">30 ms</td><td data-page-node-id="HkE0EJuknlvzCbMQjk6bUu">20 – 50 ms</td></tr>
+    <tr data-page-node-id="yxgVMFtvvDLY1ysjePW9wJ"><td data-page-node-id="DYgWRmBGdreKPYQGwSGTuk">增益</td><td class="num" data-page-node-id="VEQE9n9myXIo2BkUcDi3z7">0（最低）</td><td data-page-node-id="wLrpsYGCxIbHMNDbKuzkBe">不够亮时再提</td></tr>
+    <tr data-page-node-id="9EuHB8rIHNceGygIvpQ1zF"><td data-page-node-id="3vRzWndVGu0w8QhaIyGeco">融合帧数</td><td class="num" data-page-node-id="fhdr2g0QnZG57Hw8Av6TQy">3</td><td data-page-node-id="EuEsskdiHMCBJwkDtaAz2F">1 – 5</td></tr>
+    <tr data-page-node-id="e6epCe8DqwccTm7knBdaj9"><td data-page-node-id="fQjscCreDGDcrT0WYB9OhY">融合方式</td><td class="num" data-page-node-id="QlcCKuLBiUFWQNP3VOew5a">mean</td><td data-page-node-id="CXiYJ5MuamSARoRaapVwKe">静态场景默认。max 会保留多帧里最差的一帧，只在被测物会动时用</td></tr>
+    <tr data-page-node-id="QomPIxndwfARZ1rTfGBfpq"><td data-page-node-id="hKp8K0c3sK1SXDsKEJCbp0">采集间隔</td><td class="num" data-page-node-id="FxVGEz1OBEE0qcMjhQPsPj">模板 capture.every</td><td data-page-node-id="Wnvxh2tERAW4wxLTibiFOF">命令行 <code data-page-node-id="lCYeMWLiigCwZKf4wgUwEr">--every 60 / 1m / 5m</code> 可覆盖</td></tr>
+    <tr data-page-node-id="kL3QAvfD7nVM5WkeVj08Yh"><td data-page-node-id="wJbCGdKpJo9Ya8GsuaTh0u">自动终止</td><td class="num" data-page-node-id="qHtRa1YY30xslCZ6PXZf8r">命令行 --stop-at</td><td data-page-node-id="0f0JXaVpqhcOYs1yYuQMIc"><code data-page-node-id="dlH5DErP2sgEuNF4BWG5VW">--stop-streak</code> 默认 5；不进模板</td></tr>
+    <tr data-page-node-id="FVs30pkFdw3jt5Fk9SiQOl"><td data-page-node-id="jlkU4o684vXPFlgGM4Blln">阈值系数</td><td class="num" data-page-node-id="CLu1jDbbMkr36JvgJEsJeP">0.40 × ref</td><td data-page-node-id="yptyI554ZrxyZrz5sEpjm7">0.30 – 0.50</td></tr>
+    <tr data-page-node-id="REGfGS7WcS24HVLL3JBCn7"><td data-page-node-id="BkppTYc5xGQiSFGUfdLC0S">亮段目标灰度</td><td class="num" data-page-node-id="nEhj2t4riyv32OUfg5xh6H">150 – 190</td><td data-page-node-id="zAtkVyDjkSU1vNoPX9EhuL">/ 255</td></tr>
+    <tr data-page-node-id="QJ54zIqSHASR6XAqFaZGrZ"><td data-page-node-id="I1OVa99Ebvo4cuvsDFUXHJ">减光</td><td class="num" data-page-node-id="rTMhXyxGOampDD8WI0IJpb">ND16</td><td data-page-node-id="sOCAMZ6yBojTUyClAcdo3L">ND8 – ND32 或收光圈</td></tr>
+    <tr data-page-node-id="U4cFP0podZygQp4R8xZQQu"><td data-page-node-id="O8fzKbrOs0TFCK2WSUoab1">投票帧数</td><td class="num" data-page-node-id="4WX8bEoiCjEKaQ2k3MfAL9">连续 3 帧一致</td><td data-page-node-id="UeJaFiiPMduDErve9rFjLn">—</td></tr>
+  </tbody>
+</table>
+
+<h2 data-page-node-id="86SGqrfW7LAaHqMOuhQyNc"><span class="n" data-page-node-id="ZlYAbuSFy9hWJUi2Bfr8Ha">10</span>验收测试清单</h2>
+
+<ol data-page-node-id="gFHgajW97Lxs2WSCrqH5Hm">
+  <li data-page-node-id="HSH1bM8fCWKKYsgmsCkgRq">自检全亮态下，中位与右位 7 段全部判为"亮"，左位 b、c 判为亮且其余段判为灭。</li>
+  <li data-page-node-id="6QAYmeldc9Owpn9KRqN6bS">从左位空白态到 1 的跳变能被捕捉（左位两态各测 20 次，零误判）。</li>
+  <li data-page-node-id="gp3NFuGRdqOLBd9ClBB0Gf">取值域内逐一验证：<code data-page-node-id="FFMJWTvRTbt27h6WZq3gch">0</code>、<code data-page-node-id="v7OYWErpeEFAGDfvAp988d">1</code>、<code data-page-node-id="mknFqOJARKZq3mSYUULziA">88</code>、<code data-page-node-id="0C0Wm5QF7R0zTAXwyDHqEx">100</code>、<code data-page-node-id="QhI0PZXIvXDrTKZGQ8ZCBi">99</code> 五个边界值各测 50 次，零误判。</li>
+  <li data-page-node-id="ubuljkiP1W9QHIoxhMfqEq">把环境光从暗改到亮（开顶灯、开窗），读数不变——这一条验证的是窄带滤光片是否真的起作用。</li>
+  <li data-page-node-id="9lEoTbtuFSSR15dlpED6wY">相机轻微移位（±2 mm）后读数仍稳定——验证 ROI 余量是否足够。</li>
+  <li data-page-node-id="XvJoXGbsAidUBHW9kvtEHM">连续运行 8 小时，统计读数一致率与异常帧比例。</li>
+  <li data-page-node-id="Hjx9J3JwHzFxQ4WeqkjIlf">把 LED 亮度人为衰减（串一个电阻降低驱动电流），确认阈值仍能正确区分——验证亮度漂移裕量。</li>
+</ol>
+
+<h2 data-page-node-id="9BelCn4KJwfDbCdgKrNpFJ"><span class="n" data-page-node-id="GpTHQ7SsTojwBXLYWEgrGE">11</span>风险与兜底</h2>
+
+<table data-page-node-id="A3et4KLmGeZQoiG0LbhhRK">
+  <thead data-page-node-id="JYQkdLj8iNhMC36SBz5Wj2"><tr data-page-node-id="sHADOKOisRBFBa74kTfAGG"><th data-page-node-id="BmBOgfDYZJBgJ1w8KehqSd">风险</th><th data-page-node-id="MW6Cg3WR9fj1qs5TMHbAD0">概率</th><th data-page-node-id="oYbEDozjrmiIYH93XLWysF">兜底手段</th></tr></thead>
+  <tbody data-page-node-id="dGUep3v1ZSeBVphNblbDQI">
+    <tr data-page-node-id="MLWdrVxy0CkTYY9mwrEmWz"><td data-page-node-id="cxg01dTpkwFDiyDZQB5oFe">UVC 曝光写不进去</td><td data-page-node-id="1GnhqfhG5WS5HPFrlua9yG">已确认</td><td data-page-node-id="FAbcw5CQNCxWzYDIJxQW5v">走<strong data-page-node-id="T1tUdYmLN2RtPb9KL94N1U">驱动原生属性页</strong>手动设曝光（<code data-page-node-id="sVVxZMTkFHwOR7vGtis2gI">--props</code>），实测有效；OpenCV 写这两个属性会把画面打坏</td></tr>
+    <tr data-page-node-id="v8fLB989d8Pg5DxCjJrAEg"><td data-page-node-id="Qx2kMDSDh066c65Hj1tKjE">灭段偶发被光晕抬过阈值</td><td data-page-node-id="wNBvQktHqD0OmWvOwEfILZ">已解决</td><td data-page-node-id="CCWGwPCGuwNJyBkiH0j1zL">融合方式用 <code data-page-node-id="BWpfhK9zFytXFZG5XClsDT">mean</code>（已是默认）。实测成功率从 33% 提到 100%</td></tr>
+    <tr data-page-node-id="JuKw0lYp3amIswu6TWDyeV"><td data-page-node-id="ilVd7qw48zrHDP4ZtJI29C">不加减光片导致全段饱和</td><td data-page-node-id="odPghe7zOkQy83LKGhgAje">高</td><td data-page-node-id="UoTymzbkWIGtVbOpNtBxTy">收光圈 + ND；实在没有减光片，退化到方案 C 用短曝光</td></tr>
+    <tr data-page-node-id="7DH3BSDQo7fF8m8m99qVeq"><td data-page-node-id="jZTUdWbtaLfBJ7GHDr9R1X">镜头视场不够，框不下 3 位</td><td data-page-node-id="ZXXJsMrf1YyjA217aRE1gG">中</td><td data-page-node-id="FFvJTsUpeP1jOTW8MuTd7z">按第 04 节公式换镜头或拉远工作距离；分辨率有余量，不担心</td></tr>
+    <tr data-page-node-id="iRip8HeKFNcGH56hauIz9x"><td data-page-node-id="w473CR1tHfORpaMPGTmagn">段间漏光导致灭段被判亮</td><td data-page-node-id="Jo6TEYZP4xC5LjZ0b7aBfT">低</td><td data-page-node-id="dcO5RxXPLIJ8vuqcQhp4vu">采样框内缩（<code data-page-node-id="lQgZQrZv7FGvieKBBSVJe8">--shrink</code>）；抬高阈值系数到 0.45–0.50</td></tr>
+    <tr data-page-node-id="jDxAIEx0DuVxmdeHCOJnL3"><td data-page-node-id="BThyVYSb1E5DzjdPP7uV59">屏幕实际值超出 0–100</td><td data-page-node-id="6Ux0PajcMXXqFyAUhVLQy7">低</td><td data-page-node-id="ONqpIqGY4rUHSaakvrdKuE">校验规则直接丢弃，不输出错值</td></tr>
+  </tbody>
+</table>
+
+<div class="callout c-blue" data-page-node-id="yoxsxbZTuZfPX9UdADMS4E">
+  <p data-page-node-id="aARvWgzVAReGImcqomqlAO"><span class="t" data-page-node-id="wAYH3weedYeKkKeZFTJqc2">如果后面要扩到更多工位 / 更多读数</span></p>
+  <p data-page-node-id="AewCw2uxmCQatsYDaMLyKr">这套方案是"一相机一屏"的固定工装思路。若以后要覆盖多个读数点或被测物会换位置，需要补两件事：一是相机标定消除畸变（虽然厂商宣称无畸变，仍建议做一次），二是加一步自动定位（蓝色高亮阈值 + 连通域找数字框）替代固定 ROI。目前的静态单工位场景不需要。</p>
+</div>
+
+<h2 data-page-node-id="1tZMJGaRrZTBN6zXYrBfJj"><span class="n" data-page-node-id="ldxJ7AXLPrtyUq6jHBpHX8">12</span>故障排查（已在真机上定位）</h2>
+
+<div class="callout c-red" data-page-node-id="QjMmmjQ4qo7fAOT8Rx4Nz0">
+  <p data-page-node-id="pHFxKXbSiCIALpU0vheHyJ"><span class="t" data-page-node-id="x0UCs0JRQw9pjIB80l77ZF">症状：probe 里所有曝光档都是均值 254、饱和 100%、std = 0</span></p>
+  <p data-page-node-id="RiqpnioieRjTZnQotmhTdO">画面是一片纯白，不是"过曝"，也不是相机坏了。我第一次跑 <code data-page-node-id="2Bn1GsgwNSM7hOzY0jsCs3">probe</code> 看到的就是这个，当时按"过曝"处理是错的方向。</p>
+</div>
+
+<h3 data-page-node-id="EPjDLQJdmNifjFauqfEPbk">根因（有实测数据支撑）</h3>
+
+<p data-page-node-id="rV0N7bs7x84d5oYjucPk4D">用 <code data-page-node-id="EudsFUZJQxNwXglLlyDSVB">diagnose</code> 的属性写入隔离测试逐项排除，结论很干净：<strong data-page-node-id="dL55NXQa0FzO0j9fiUZy7J">只要写 <code data-page-node-id="yHEbjMHPrzghL0bKhQGbYM">CAP_PROP_AUTO_EXPOSURE</code> 和 <code data-page-node-id="dXx2kA39rA4RGvn030iknj">CAP_PROP_EXPOSURE</code> 这两个属性，画面立刻变成纯白；完全不写就一切正常。</strong></p>
+
+<table data-page-node-id="xW2ZQyYIrdZdHGHbcXKuBz">
+  <thead data-page-node-id="kAoBUltcdg1oTpLo8RxZ9v"><tr data-page-node-id="75371NdrHmRo8mMbZ86AfN"><th data-page-node-id="rDDbf773eH18dRcu5bcmsQ">测试项</th><th data-page-node-id="Iclb6J6c82rw1abPKbAcs2">写入前</th><th data-page-node-id="Hw8iXofDQnBSOHLszKNxFK">写入后</th><th data-page-node-id="O3N1uoZV4hWCrwM0VMVaAw">结论</th></tr></thead>
+  <tbody data-page-node-id="bstuDzTnZ7G7EGMDNFW4hq">
+    <tr data-page-node-id="5LFIO8CFgf6gLRnw4Bovdl">
+      <td data-page-node-id="CX8prSRnHrkJV7iLb2coMX">基准：不写任何属性</td>
+      <td class="num" data-page-node-id="VplLhMYXXrl6X4v54jP5p3">均值 99.7 · std 50.1</td>
+      <td class="num" data-page-node-id="zLPtOBIZVTjbXVyULP3BjZ">均值 101.6 · std 50.8</td>
+      <td data-page-node-id="bxWw17eEoH7LWhlZVgEbFP">正常</td>
+    </tr>
+    <tr data-page-node-id="U4HYVV6wuwCy6LaO7KJdJn">
+      <td class="num" data-page-node-id="59sbb9uJDhDG5z4c1C6W3h">AUTO_EXPOSURE=0.25 + EXPOSURE=300</td>
+      <td class="num" data-page-node-id="9BszdfBNWfbXWFTcVpPpye">均值 136.2 · std 58.8 · 饱和 2.2%</td>
+      <td class="num" data-page-node-id="IRRpfJLMKS23X0Rqqa1nV0">均值 254.0 · <strong data-page-node-id="pMlimfWr6a8wAlnsbHDtK9">std 0.0</strong> · 饱和 100%</td>
+      <td data-page-node-id="FVSLQtc7yDxj34MfdSK0vP"><strong data-page-node-id="gWPQsQrjbKpfeNRUsBmSsa">写入即报废</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<p data-page-node-id="9duPeOcJ8EhWChLrCDtwGl">注意第二行的对比：写之前是一张完全正常的图（有噪声、有明暗层次、std 接近 59），写之后 <code data-page-node-id="owF5MOwQNKRwtVmRRxx5TV">std</code> 直接归零、<code data-page-node-id="q6JYKkMoUoRbZHBA2SUmFR">min = max = 254</code>。这是驱动层的状态被写坏，不是光学问题。</p>
+
+<div class="callout c-teal" data-page-node-id="RLiAKGreBl8mcWdygUEbTX">
+  <p data-page-node-id="gEs9fNlqpS8sv6WnrLJgoe"><span class="t" data-page-node-id="GBwww9lLH2SDgeA8mLx2uO">解决办法：不写曝光属性（现在已经是默认行为）</span></p>
+  <p data-page-node-id="iiBu1PXnaR3El4DGvlFc62">让工具完全不去碰曝光/增益属性，改用相机自身的自动曝光。场景偏暗时自动曝光本来就会把曝光拉长，很可能已经长到足以覆盖数码管的整个刷新周期——正好是我们要的效果。</p>
+  <pre data-page-node-id="sFbHzckIN8J7zLOuicvqHz"><code data-page-node-id="S7EpW3PhHyPhJbFzYek4he">py seg7_reader.py snap      # 抓一张图先看看
+py seg7_reader.py probe     # 看当前画面亮度
+py seg7_reader.py calib     # 标 ROI</code></pre>
+  <p data-page-node-id="vZDHDXR06SPqci7tfXhkcB">这三条命令都<strong data-page-node-id="RDaZi5AhAiDWJOdh8ZfQCF">不需要</strong>再加参数。若换到一台确实支持手动曝光的相机，加 <code data-page-node-id="gOeiLPD0p5SFlt78tXeDX3">--exposure-write</code> 即可恢复写入行为。实测不写之后画面恢复正常（均值 149.7、饱和占比 2.5%）。</p>
+</div>
+
+<div class="callout c-teal" data-page-node-id="8HykcvY9Xm0jvnD0HCsu7n">
+  <p data-page-node-id="elncALowAKWyt45TZvUQEB"><span class="t" data-page-node-id="scAAIvsOFJOF2Ia4gGRpaW">曝光控制的可用路径：驱动原生属性页</span></p>
+  <p data-page-node-id="jFElrnqRq3Z9kDz9fsgcCW">OpenCV 写 <code data-page-node-id="vHBeqwEXCsuTVkGdTn8LZY">CAP_PROP_AUTO_EXPOSURE</code> / <code data-page-node-id="yEHUOZhA5DIgiK4fOL9TyZ">CAP_PROP_EXPOSURE</code> 会把画面打坏（上面已定位），但<strong data-page-node-id="MeFbgOLAB0OrgUC3FhG3Wl">通过驱动自己的属性页手动设曝光是完全可行的</strong>，已实测有效：</p>
+  <pre data-page-node-id="qv3MovgM2grq666hMkniqh"><code data-page-node-id="zyve72xLQTpm9PWvOGyejT">py seg7_reader.py --props --camera 0</code></pre>
+  <p data-page-node-id="4EZrjWuCBWgYWG5TU4bXLH">会弹出 DirectShow 驱动的原生属性对话框 + 一个实时预览窗口（预览上叠了实时亮度数据）。在对话框里关掉自动曝光、手动设一个较短的值，盯着预览确认画面跟着变。</p>
+  <p data-page-node-id="OauqT5U2e7H4swWGsoAq6D"><strong data-page-node-id="Ne5NTqX8fiwTOmldW0dnIJ">两个注意点：</strong>这个设置存在驱动层，<strong data-page-node-id="MbnpepfFhAOnzm7j9YQy1U">重新插拔 USB 后可能被重置</strong>，工装上线前要确认持久性，必要时每次上电重设一次；另外一旦设了手动曝光，就不要再用工具的 <code data-page-node-id="9GkWAB4k0Vs8oLQR4RKrFN">--exposure-write</code>，让驱动保持你设的值即可。</p>
+</div>
+
+<h3 data-page-node-id="QKqThq0XrzdwGl1kOEqw5b">第一张实拍图暴露的三个问题</h3>
+
+<p data-page-node-id="f0JjH0LrRHvgO2d4bl51Rj">修好默认行为后抓到的第一张图（<code data-page-node-id="02zMZJ6otew38nQX7dcHQK">py seg7_reader.py snap</code> → <code data-page-node-id="GeAGb2CsbLSq5DWUQFE3bv">snapshot.png</code>）确认了一件事：<strong data-page-node-id="pE1Fo91PFBkP1nvjVbYkwa">设备 0 拍到的确实就是那块数码管</strong>——竖直的 PCB、中间的数码管、下方 <code data-page-node-id="1xPe264wQtO0kIx8DODmPf">POWER LEFT</code> 的亮条，都在画面里。但同时暴露了三个必须处理的问题：</p>
+
+<table data-page-node-id="OEWGtYCUq2a5G3ITYl8Zow">
+  <thead data-page-node-id="r7qrUQNqFJ2wE5rMYpT9KO"><tr data-page-node-id="O4okU3HzUav6i3cAfCSUOl"><th data-page-node-id="oGzQOjpA4fFUNeNnMC0n5C">现象</th><th data-page-node-id="miH4Cn5xwWWjM1E4Ti4EYn">原因</th><th data-page-node-id="YFBhObrW9ixeYnz3F3rQpg">处理</th></tr></thead>
+  <tbody data-page-node-id="jK7UDalMupzOL5wBGlFcPu">
+    <tr data-page-node-id="BovuDDh0LZmUfNxBNpWjE4">
+      <td data-page-node-id="6byFYOtKIDQklV3LwHotD4">数码管糊成一大团白，段与段完全分不清</td>
+      <td data-page-node-id="cR5DCrPTMzeC42YBVlDA6F">自动曝光按画面里大面积的白色桌面测光；LED 比桌面亮得多，桌面正确了 LED 就必然溢出</td>
+      <td data-page-node-id="y4hrSFXlUN0HyRDdddmWeK"><strong data-page-node-id="FuyOJJUgj9i0msXhFHdb7C">装窄带蓝光滤光片</strong>把桌面压黑，自动曝光就只剩 LED 可测（见第 03 节）</td>
+    </tr>
+    <tr data-page-node-id="Zs5T0IjMrYvK9Lqf94J1oE">
+      <td data-page-node-id="qzGEJKL2MZfku6AbGe1QGH">画面整体发虚，段边缘不锐利</td>
+      <td data-page-node-id="fEDZBLV1Mq8n36D4iar6CD">镜头没对焦</td>
+      <td data-page-node-id="hbmGVaChMxDoMr1398tf2D">拧镜头对焦环，直到段边界清晰</td>
+    </tr>
+    <tr data-page-node-id="ZwKlvbHjd0lkWqEDf8NAUJ">
+      <td data-page-node-id="c4FyuS8Ct0jdJlAWb5kXOj">数码管只占画面宽度的 10% 左右，四角变形明显</td>
+      <td data-page-node-id="ppLiaG9T71UrKKSgobNztL">焦距偏短（广角），工作距离也太近</td>
+      <td data-page-node-id="A9NQMqNMlppUEaJ4hWxQ7h">换更长焦镜头或调整工作距离，让 3 位数字占到画面宽度的 20–40%</td>
+    </tr>
+  </tbody>
+</table>
+
+<p data-page-node-id="RANplIg2D6J0QvEWQEW52l">第一条值得单独强调：<strong data-page-node-id="8xggNnnIwcEgIYu26dUjZe">它把光学件的采购顺序反过来了</strong>——先买窄带滤光片，再决定要不要 ND，很可能一片 ND 都不用买。另外这也说明"过曝"和"驱动写坏导致的纯白"是两种完全不同的故障：前者画面有层次、只是亮部没细节，后者 <code data-page-node-id="eTAMY6Vz3V1u4zPiasdX1q">std = 0</code>、整幅一个值。</p>
+
+<h3 data-page-node-id="xKFqLhytvsRqHWLam2qfiE">两个容易误判的细节</h3>
+
+<ul data-page-node-id="6FqvZ9u3Gr4j1wT59nqRDA">
+  <li data-page-node-id="FROq3Cgh0VpEf3hOjyP7CO"><strong data-page-node-id="q6IwELDKYiObVZGwFpZXV4">写坏的状态会污染后续操作。</strong>在同一次进程里重新打开设备也恢复不了，必须整个进程重开。所以工具现在会在回退后再自检一次，如果还是纯色就直接报错让你重跑，而不是拿着一张纯白图硬往下算、最后输出一个看着像模像样的错结果。</li>
+  <li data-page-node-id="D50TLGWIjEixXPFUP7vdDb"><strong data-page-node-id="t3uUMicBLdoPN9XG7EIFXY">设备本身是好的。</strong>隔离测试的"基准"行证明了这一点（std≈50 的正常图像）。所以不要急着换相机或怀疑 USB 线。</li>
+</ul>
+
+<h3 data-page-node-id="33FEIiNZfFy25nzEC0bB1b">工具侧已修掉的相关坑</h3>
+
+<table data-page-node-id="ih0A5RWdtMRRjxovAKoJE3">
+  <thead data-page-node-id="32ZvJnnGDOL4WCIfrFWHKw"><tr data-page-node-id="AkWzNx04aDRvICfID80ejX"><th data-page-node-id="R8z5HOtpZRrA19oCxG7maQ">坑</th><th data-page-node-id="6OZXPnlGl0Ca9g6Lk0Dla4">表现</th><th data-page-node-id="Z0gO2NOV6wJh8LJBC9T77k">处理</th></tr></thead>
+  <tbody data-page-node-id="bsT6RenBns4fHfgfVSKRjJ">
+    <tr data-page-node-id="CJbHFbwAI1ByRSOpiYAA9F">
+      <td data-page-node-id="KXEafSu6EuMKS0AhiV5ZB9"><code data-page-node-id="nWasx7zbNvTAtQqBrwAZGW">cv2.imwrite</code> 遇中文路径静默失败</td>
+      <td data-page-node-id="o3BG5juq9oNsqKviPnL5tB">标定预览图、调试图存不下来，但程序不报错——而本目录名就带中文</td>
+      <td data-page-node-id="N1MniCBPjMzB6jsBsCXZFD">改为 <code data-page-node-id="9CmPf0k2IglaD3HMcdVRs3">imencode</code> + 二进制写入，绕开窄字符路径</td>
+    </tr>
+    <tr data-page-node-id="Q83dzNNhIeKU9lTTshjGoo">
+      <td data-page-node-id="rgmkyonaisP9B8YGY9qCDa">驱动被反复开关会崩</td>
+      <td data-page-node-id="fFZW0pHL7k7BK46QZzaH3M">诊断脚本整个进程死掉，连输出都拿不到</td>
+      <td data-page-node-id="wf3nA4iDlpWnea65WPrm6E">隔离测试每项跑在独立子进程，"崩了"本身记为一条诊断结论</td>
+    </tr>
+    <tr data-page-node-id="ajx9OCwVkEHDAeP4OA4G7T">
+      <td data-page-node-id="XfkWfQmgY9GpmkFbKoAHrL">命令行传 JSON 引号被 shell 剥掉</td>
+      <td data-page-node-id="oDiuNTmKOUHxBPOwc2cEjO"><code data-page-node-id="zkoXNmDzUPByxRLuBKVyOh">--spec</code> 收到非法 JSON</td>
+      <td data-page-node-id="WgOrpCWDFEZ5bt2ysjZRE9">改用 <code data-page-node-id="qcwJK1cdSrdzXCBiRfkHYz">--iso-index</code> 传序号</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 data-page-node-id="bsOh8NZwLA3mPC0cRUBlaD">排查顺序</h3>
+
+<ol data-page-node-id="FDF21RTJowhOg7nLWnvZiy">
+  <li data-page-node-id="Vm01jiLHfihVLDlGrgR0ur">先跑 <code data-page-node-id="hhdoXjRL1CGKDjldOvKUsM">py seg7_reader.py diagnose</code>，看设备枚举表里哪一行是"暗背景 + 小片亮点"，那就是数码管。</li>
+  <li data-page-node-id="rYIhnpxrCji16QCRHrqKXP">再跑 <code data-page-node-id="hSB59sa7Hed5ts8o9z68nO">py seg7_reader.py diagnose --camera &lt;号&gt;</code>，约 20–60 秒，它会告诉你是不是属性写入把画面搞坏了。</li>
+  <li data-page-node-id="sG4Hl9tkcH62uXvKC58SnH">按结论加上 <code data-page-node-id="AG38yqmbkKy1tqzGHPpSwZ">--no-exposure-write</code> 重跑 <code data-page-node-id="UUqoFndOXHjxycsqMHn1Af">probe</code>。</li>
+  <li data-page-node-id="ih77YMaDpYZhKRkoB0BWBX">还是不行，就用 <code data-page-node-id="uVspp7AEbnnE1rX5DWeN9q">py seg7_reader.py --props --camera &lt;号&gt;</code> 弹出驱动原生属性页，手动拖曝光看画面是否跟随变化。</li>
+</ol>
+
+<h2 data-page-node-id="jpubIojnUE3nV89KXVEfjK"><span class="n" data-page-node-id="cZOyGZpmpqleNi1Pn9PUGv">13</span>实测记录（真实工位，非实验室）</h2>
+
+<p data-page-node-id="RToPo4ghV0Awdfg89JiMrY">下面这些数据都是在你们这块板上、用这台 DCXG100 实测得到的。列在这里是因为它们<strong data-page-node-id="XTSBGE2wKD80m4ah2GpX4I">推翻了方案早期的一些判断</strong>，每一条都是踩过坑换来的。</p>
+
+<h3 data-page-node-id="A1RJQosw1GCF3hFOwh0ynj">13.1 融合方式：max → mean 是决定性的</h3>
+
+<table data-page-node-id="CZ2RAMqZ3eL6s8FEYvu3Lf">
+  <thead data-page-node-id="Exhe5isApbfcEYENmrS6ZG"><tr data-page-node-id="xi57e1B1Sh47ELeQbKlzP1"><th data-page-node-id="BKJzDpxyPWJf6ujcliz4DZ">配置</th><th data-page-node-id="ubo5yfKmA4gYLTrEAlsXfQ">尝试次数</th><th data-page-node-id="iayU6rJldslBpQoYyxljb9">丢弃</th><th data-page-node-id="EMFNLocefqpEJ5KTeKhseI">成功率</th></tr></thead>
+  <tbody data-page-node-id="gZeiFRdFJnN7VIGHAj0Jxz">
+    <tr data-page-node-id="LHGidaZ40nYVmi8WEoQtQ2"><td data-page-node-id="pXiOxmJtOnXEwNNAxMyGRn"><code data-page-node-id="wM4VEh6cemVMT9oxfyHFIu">--fusion max --frames 3 --agree 3</code>（旧默认）</td><td class="num" data-page-node-id="6irfvMVaqeASdZchMFNoql">9</td><td class="num" data-page-node-id="nPMZbEErfr3ZVC7bWMOXMd">6</td><td class="num" data-page-node-id="fwQUBF62uK94JQ7hOsBBqw">33%</td></tr>
+    <tr data-page-node-id="isIGA2CwkVmTDo49IxXhes"><td data-page-node-id="qJv3RnP4aHc2N7WlkW7GJW"><code data-page-node-id="GKgsv6b8oPIyDzDXMuqZyB">--fusion mean --frames 3 --agree 2</code>（现默认）</td><td class="num" data-page-node-id="dScgvWc9LkPyYoUcJnK4iW">2 / 2 / 2</td><td class="num" data-page-node-id="gCECbPpeBA0dUyCEVVnTRN">0</td><td class="num" data-page-node-id="KBlQMiwbSh8Gxl6AQ8owJX"><strong data-page-node-id="9L3BhjSWfZuUPsksE9U2T3">100%</strong></td></tr>
+  </tbody>
+</table>
+
+<p data-page-node-id="bnpbA29LL9n878RFLcEU8o">三次运行的 <code data-page-node-id="B1IxdL19oqrJtNZfMk03zD">attempts</code> 都是 2 —— 理论最小值，一次都没浪费。这套参数<strong data-page-node-id="d6ae5T9sylIIFFAwbME9Rz">已经写进代码默认值</strong>，不需要再手动加 <code data-page-node-id="VvzP81k8ZgtmxqYh2CSj2m">--fusion mean</code>。</p>
+
+<h3 data-page-node-id="qFKE9OnqXWBGxrmurJNQAh">13.2 为什么 max 会放大失败</h3>
+
+<p data-page-node-id="PTL6rak0EZ3AAGpSO7x88y">逐帧测灭段灰度（连抓 14 帧、不做任何融合），结果是：<strong data-page-node-id="gsiMtkhL7bYjthUy4ccFVc">亮段极稳，只有灭段偶发跳</strong>。</p>
+
+<table data-page-node-id="LeeMqTpDRy7aVa7avIfUE3">
+  <thead data-page-node-id="0uxTVZ4KInOEMyKPM810oJ"><tr data-page-node-id="8GeeOS1LajtrBGK5suBn2c"><th data-page-node-id="RIMRhO8ca7j3A8qlLjM8fO">段</th><th data-page-node-id="SwnqXVxGpSA6dn3xm8OGWB">均值</th><th data-page-node-id="OF4kzAnubEcoXmtQBkKcRH">最小</th><th data-page-node-id="5nwe5MZKaN3ppTSJRIlzp6">最大</th><th data-page-node-id="DkWoYrUiUfMWqieovQoMSK">标准差</th><th data-page-node-id="FqVFxaxM4yP013bOY2h6pZ">超阈值帧数</th></tr></thead>
+  <tbody data-page-node-id="uFgAQiaaxrPWZ6RWQR4Cph">
+    <tr data-page-node-id="y1sjDw7dciXAgZL1WNVNjj"><td data-page-node-id="DAUreVwrBMLsMpxfi6y3mi">中位 a（灭）</td><td class="num" data-page-node-id="JUp7fXcSVt4XiSEM5yeSjm">8.7</td><td class="num" data-page-node-id="qsi0Iqr0KYP4ucDpIDtYLE">0.0</td><td class="num" data-page-node-id="k7tLsKnwiNZj9DFm4UshQG">121.5</td><td class="num" data-page-node-id="7Olh2biM8qd2DJ9mxdXKr9">31.3</td><td class="num" data-page-node-id="3aN0712B3maLgBIiP3O4kl">1/14</td></tr>
+    <tr data-page-node-id="MJYqDmkMWma3xaXCCGJugl"><td data-page-node-id="R3VG3dIjTwvZ1oCJvBhJ9C">中位 d（灭）</td><td class="num" data-page-node-id="aCHT6ijT8r2tX09dsCHKDN">6.1</td><td class="num" data-page-node-id="uomMDk2UWQer9VwdTOaPa0">0.0</td><td class="num" data-page-node-id="k1IwxjLkiwav2h48mHMfc6">81.0</td><td class="num" data-page-node-id="AAb0yOsDTBMlLHaSqE2QTo">20.8</td><td class="num" data-page-node-id="wwOaMViYS9S4JHvj1bMP72">0/14</td></tr>
+    <tr data-page-node-id="0SstpaTEHfD57UPBP3bpVy"><td data-page-node-id="vD0dmd6PwPUUOQNkpEJdTW">中位 e（灭）</td><td class="num" data-page-node-id="ADlCe6CJa0khhR6o7DJn9Q">5.6</td><td class="num" data-page-node-id="ttXe8Y1QJUjSbLEktaByWU">0.0</td><td class="num" data-page-node-id="sWjnqvkqWzhtCbmN9C9ddU">79.1</td><td class="num" data-page-node-id="ZNMMW69osyWhHMP8MQAAQQ">20.4</td><td class="num" data-page-node-id="RLNVy3oGBezE63j7Dnm5iF">0/14</td></tr>
+    <tr data-page-node-id="2dIH1L1UqGUJUMFNFlAKxx"><td data-page-node-id="EjFP8RDjKKFqY57FEVpePk">右位 a（亮）</td><td class="num" data-page-node-id="5EUqlWT9gSMBZ7NKKU7GVD">249.3</td><td class="num" data-page-node-id="cbBXL3hCEZb66bYfCx42c9">245.9</td><td class="num" data-page-node-id="daqrwAqqyeXJE06RHJOWE3">255.0</td><td class="num" data-page-node-id="VSuj8Yw1L1mUfYymnnGBrC">3.4</td><td class="num" data-page-node-id="6oriOyMl4hoIAbGNTe2lvJ">14/14</td></tr>
+    <tr data-page-node-id="KDDtc0amdEzZkraQHvxvXC"><td data-page-node-id="xNYRQY8DHOKmhBY99jWTdf">右位 d（亮）</td><td class="num" data-page-node-id="BCgfWBICRDx9rbHU2zyX9P">253.9</td><td class="num" data-page-node-id="OuU2BkP1wjeaKltqfTDsue">253.3</td><td class="num" data-page-node-id="xsOeiZHosVRFNYECfGBq3P">255.0</td><td class="num" data-page-node-id="KIocq8fKdpCMlIxdCGiFOA">0.6</td><td class="num" data-page-node-id="3Rx5mBjOnBd7NQvFtPXzsf">14/14</td></tr>
+    <tr data-page-node-id="H6AqlG3m9OB1gvzpiSqnW0"><td data-page-node-id="45eR0egC3bfvdUdHEi7Fum">右位 e（灭）</td><td class="num" data-page-node-id="CSfiNA6h8pDaV07bwbJtFx">18.6</td><td class="num" data-page-node-id="p4sDqGVtAVMcArY7E5I4Xx">0.0</td><td class="num" data-page-node-id="ePBiQRbg9oPBXSp5H4FnwH">161.2</td><td class="num" data-page-node-id="mqxI5fVIFpXuoKRnpXzGK9">47.1</td><td class="num" data-page-node-id="dRtKpWNdJgvM83DLbgVuE5">1/14</td></tr>
+  </tbody>
+</table>
+
+<p data-page-node-id="4DUifnUnN8xB1s2GV419uU">亮段标准差不到 4，灭段却能从 0 跳到 161。而且跳变是<strong data-page-node-id="ZTn9vXUhVEvJnA8KtpD2dY">整帧性</strong>的 —— 同一帧里同一个数字的多个灭段一起跳（0/0/0 → 122/81/79）。所以<strong data-page-node-id="4g02u1BoT69DXRKj55EzBJ">不是采样框偏、也不是标定错</strong>，这一点很重要，否则会调错方向。</p>
+
+<p data-page-node-id="OyQe0ykkl4E9yxxE4L1tWY"><strong data-page-node-id="ZmVFD8WVb1qhfwk2BBjOoX">成因</strong>：曝光时间偏短，积分窗口没有完整覆盖刷新周期。灭段自己不发光，它收到的是亮段的散射光；散射光的积分量正比于「亮段导通时间落在曝光窗口内的比例」。窗口每次落点不同，这个比例就跟着变。</p>
+
+<p data-page-node-id="yigZz3DM64DMHbjC9zRtRU"><strong data-page-node-id="pcWlxpXFWdjZoOvLkUCAL2">max 为什么放大它</strong>：max 取多帧最大值 —— 3 帧里只要有一帧跳了，融合结果就是那个跳值。而 mean 取平均，单帧跳变只贡献 1/3。</p>
+
+<table data-page-node-id="cFG9XGNZaOJQiLRmTnBE3F">
+  <thead data-page-node-id="cPOs89pD7eu8f0y3aPH5uz"><tr data-page-node-id="b3ZauxeS2DMjsNhFHD5xY4"><th data-page-node-id="xETBP73AbT0i8eDlcRzX4b">某灭段三帧为 (0, 0, 122)</th><th data-page-node-id="MREDTnlEYheGTqTvvOBK3S">融合结果</th><th data-page-node-id="2RmU0J8t9X4Sg7rtEwHkh6">对阈值 102</th></tr></thead>
+  <tbody data-page-node-id="knoMyJIrZwnXzdOnfESbHk">
+    <tr data-page-node-id="4SBjMcd6aVnWUMD44wyMPi"><td data-page-node-id="bvU79gAA1Yc7AiLkvIaa8P"><code data-page-node-id="GO6u9HMxgSHpIJ2IdjzJX6">max</code></td><td class="num" data-page-node-id="EzrgFS6Sp3bst3DEXLX0Ku">122</td><td data-page-node-id="KWodoaw8cjLSAllSaed9oy">越阈 → <strong data-page-node-id="oDone7nZ6J4G18Oe2awr0E">判读失败</strong></td></tr>
+    <tr data-page-node-id="C3tN0X8fjtmgAqQcVZZ2nE"><td data-page-node-id="B0vjX2lcZWP86AtXDpZIOZ"><code data-page-node-id="ZoQBhA99rJHoVNEbrigobQ">mean</code></td><td class="num" data-page-node-id="a7Us23QW12wyP1WDrrM470">40.7</td><td data-page-node-id="6mbBKGBZg6BfPvSsi40Thp">安全，裕量 2.5 倍</td></tr>
+  </tbody>
+</table>
+
+<p data-page-node-id="RQ23FVBnkOz4zXQxBfRc7i">反过来也要注意：<strong data-page-node-id="aDXItJHxEkumvt3wQEEgtm">mean 模式下加帧数是纯收益</strong>（平均更充分），<strong data-page-node-id="iAMPSftNqMaY2xggalsV5O">max 模式下加帧数是纯损失</strong>（越有机会逮到那一次跳变）。所以「8 帧 + max」比「3 帧 + max」更糟，这一点反直觉。</p>
+
+<h3 data-page-node-id="u5haehyUCrZogq8tCmXN9g">13.3 判读延迟与读数变化速率</h3>
+
+<p data-page-node-id="ErTs9SBrzfTSEHbiEuZSBC">这块屏显示电量百分比，实测变化速率约 <strong data-page-node-id="TotBBzpbL2zx0xVFsbh2kc">0.1–0.8 %/分钟</strong>（45→44 用约 9 分钟，44→33 用 14 分钟），但也抓到过一次 10 秒内变化 1。</p>
+
+<p data-page-node-id="wcr29h57mYDJF9IO0cAqRq">判读延迟 = <code data-page-node-id="fuXel9bT3BlPKL7yS6zDwU">frames × (1/fps) × agree</code>：</p>
+
+<table data-page-node-id="byDrGdlkzA4M9EJkwcCFan">
+  <thead data-page-node-id="8u8VjhBpaYBNiCJ8UlNnvs"><tr data-page-node-id="QKzZ1XR1d22AUD6WFGDBSC"><th data-page-node-id="xB0WplOn3liONbxig3psBt">配置</th><th data-page-node-id="fyNo4XDApz6sbYgWKItsbe">延迟</th><th data-page-node-id="gYvD4TlDJtYkGi1xYaosXd">结论</th></tr></thead>
+  <tbody data-page-node-id="uCGGDkYy6EGOJaoNpCmmrK">
+    <tr data-page-node-id="X838tvBFyAMMnyunglrhPA"><td data-page-node-id="GqkMiXP7HDw4RiIC3Xjw3r"><code data-page-node-id="2CZwgRm15F9TNHaHJRurto">--frames 3 --agree 2</code>（当前默认）</td><td class="num" data-page-node-id="Y1yE6y4XHRzBI661STOOz0">1.2 s</td><td data-page-node-id="3FCbOR1lz7aikQwVWesKx2">裕量充足</td></tr>
+    <tr data-page-node-id="GtBBIjRDCuM5Oj0Gv8nfCA"><td data-page-node-id="3pOAFUo4vRGPZAWlCGtoRV"><code data-page-node-id="HRA6YnDak2Jg0nvBdHWT24">--frames 5 --agree 3</code></td><td class="num" data-page-node-id="qAktg4wwxPKdtIGZDYdc3w">3 s</td><td data-page-node-id="FSfvofRjmCm8LgHGVStuBc">可用</td></tr>
+    <tr data-page-node-id="YbRWXSSTC6fKDHRvOBpwZd"><td data-page-node-id="CI5Bv5vaQapnX4zeaD61Ro"><code data-page-node-id="9l30GLPsVoYsTojZmTsWp1">--frames 8 --agree 8</code></td><td class="num" data-page-node-id="Mcz9fBr8pyWw0pppJSVAbW">12.8 s</td><td data-page-node-id="fvH7CnC2CiuPl8d0U4TxMp"><strong data-page-node-id="qwF9bmYuEYMnh5y8gzLKDP">会偶发超时</strong></td></tr>
+  </tbody>
+</table>
+
+<p data-page-node-id="fhhImbwi7Kt6Dmk3kfgoqt"><strong data-page-node-id="uJddRA7LdAu9C22jLLhq7C">安全窗口取 5 秒以内。</strong>关键点：读数一变，<code data-page-node-id="8KM3hFuKQlvfqMzGQ4RZmK">agree</code> 的计数器就清零重来，所以<strong data-page-node-id="lEmK00xc4tkCAD92MJyX4n">不能靠无限加大 <code data-page-node-id="NtfgGDdLp5OTPvCkc019MM">agree</code> 换稳定性</strong> —— 那是在用延迟换准确率，而这块屏不给这个余量。</p>
+
+<h3 data-page-node-id="2FygggAB8kM1N462vYXOSY">13.4 由此带来的验收方法变化</h3>
+
+<div class="callout c-amber" data-page-node-id="lmEIi4hevTYo2Uf4YSW1ml">
+  <p data-page-node-id="J1d1fLDntKXO9zWGSfARov"><span class="t" data-page-node-id="TyhYAthcrSQHaDZ9sDy3fG">不能测「读数自身的重复性」</span></p>
+  <p data-page-node-id="mYSgdUz5jSEaKP9hp37hJm">读数是连续变化的（电量在掉），所以「连读 50 次看是否一致」这种测法根本不成立 —— 它会一直变。<strong data-page-node-id="yBHpMLIAHFKpTZ3vZX20Hm">必须做「读数 vs 真值」的比对</strong>：真值靠人工看屏确认或参考仪表，然后统计正确率。这个区别写验收方案时很容易搞错。</p>
+</div>
+
+<p data-page-node-id="DvDKEZFp7s4JgX4v63cXrw">另外有两个状态平时测不到，需要专门设计用例：</p>
+
+<ul data-page-node-id="ZSARHY5YJJfI6WLvgSCNF8">
+  <li data-page-node-id="sGFM96Xt0qgafW2b6ACOHL"><strong data-page-node-id="94Wc3bH33LXUJhvjw17RK1">左位（半位「1」）只在 100% 时出现。</strong>平时它永远空白，那段判读逻辑实际不被触发。验收时要专门充到满电测一次。</li>
+  <li data-page-node-id="FbmEPgahC8a6WnLUsNtvnN"><strong data-page-node-id="3SQdPuk8Nv40fWewPfFJXO">十位在 0–9 时消隐。</strong>个位数阶段是唯一能看到「十位消隐」的窗口 —— 但按 1%/分钟算，这段窗口一个多小时才来一次。验收周期短的话建议人为制造（可调负载强制放电，或换一块半电的电池）。</li>
+</ul>
+
+<div class="callout c-blue" data-page-node-id="CsPpDPKOS4My1IHAkTItEy">
+  <p data-page-node-id="i1VrxSbCR6pimjzL0XHfra"><span class="t" data-page-node-id="34P2vvbAHayQ4y2ETwCYZj">验收时该盯哪个指标</span></p>
+  <p data-page-node-id="FNaZL57dQGoSoAYxWMAzGv">这个方案的所有判读逻辑都建立在「灭段够暗」这个前提上，而灭段灰度直接受散射光影响。<strong data-page-node-id="5HUhg7jrrI12yYgwkG5BdP">所以唯一真正要看的是段级灰度的分布：灭段的最小值 / 最大值 / 超阈值帧数。</strong></p>
+  <p data-page-node-id="9ZuaMINeeouAm9hp07Zi4M">全图均值、饱和占比反映的是背景而不是 LED，<strong data-page-node-id="Y6H7XPIG4V4Sn2HxLFhdtk">看它们会得出错误结论</strong> —— 本地实测中我们就因为这个连续误判过两次。</p>
+</div>
+
+
+<h2 data-page-node-id="Ukfdd8BFLLDDFlBJ6EYlZc"><span class="n" data-page-node-id="fmG8nl9nyT5bBf0OUfOboh">14</span>附录 · 交付文件</h2>
+
+<table data-page-node-id="cOWPTCeQlg92QwAQ3DAC45">
+  <thead data-page-node-id="PMd4AWRfeheGieMuILGfpt"><tr data-page-node-id="T4AMvNr8oZbavBwor5Xg3K"><th data-page-node-id="LWAfW67yEByE20ittkSML3">文件</th><th data-page-node-id="5yCqe4HNArnDlW1j6Fj4Lw">说明</th></tr></thead>
+  <tbody data-page-node-id="kKCVRCoLCDckzXg8HWAHEZ">
+    <tr data-page-node-id="eQ8UvoC041IUOqCjVLyPzk"><td data-page-node-id="t2Y3GmCLT2MuJZ7MI8j62d"><code data-page-node-id="fl2eH1TxSFE7Ta5tlLpvGd">数码管视觉采集落地方案.html</code></td><td data-page-node-id="w2ddWNRlIw2jqMPxLpkdZD">本文件</td></tr>
+    <tr data-page-node-id="ys64G63GB5gzZuMOSFb0sE"><td data-page-node-id="RzuHqCRcvuc8YjyIJ4SFUk"><code data-page-node-id="Rr2Br4iJmgYHa6CDEtDlc8">seg7_reader.py</code></td><td data-page-node-id="UmMs9HHqPiSzdzeGUBGzoH">采集与判读参考实现，含 <code data-page-node-id="FIr1dJBJb1U9EDKwhvGGTh">snap</code> / <code data-page-node-id="s1ILQZDoX3mbllpQGSUi2J">diagnose</code> / <code data-page-node-id="2F1qQeOeHVadEneAkh7vG0">selftest</code> / <code data-page-node-id="CAA8J8k9LX7TW9eY9uIbnB">probe</code> / <code data-page-node-id="9AZH4mLYAfM72Ctf9nZfT8">calib</code> / <code data-page-node-id="wNGQ6Ml4PiFPCo1Uysar5u">read</code> 六种模式；不带参数会打印推荐执行顺序</td></tr>
+    <tr data-page-node-id="pmwNmH8HgovdYR2A41mo8I"><td data-page-node-id="XUNAzVZrMggJEAmjiEfYy0"><code data-page-node-id="SVhjWsjm6mK8QaHLYFZrJT">selftest_offline.py</code></td><td data-page-node-id="9uJiNm1rho83qVyqUOHtHz">无相机离线自检，合成图像验证整条判读链路</td></tr>
+    <tr data-page-node-id="9mQqBNHYhosUC16axHjoV2"><td data-page-node-id="1oeNMn3TaZYF2dr5NcEDGe"><code data-page-node-id="MhBt7zfUwbqWGhtDz7sBtc">selftest_report.txt</code></td><td data-page-node-id="gmPdaqj8mHEOOvthjowrFz">离线自检结果（17 项全部通过）</td></tr>
+    <tr data-page-node-id="dd72ezhEC70waLzYoaRpMf"><td data-page-node-id="n1lbzU7FUd0vyXEyDQMLuA"><code data-page-node-id="ia3kVbOCdXqHuRHkNPlxS5">seg7_roi.json</code></td><td data-page-node-id="qF3iLx5GC5L09ACX2DCRdZ"><strong data-page-node-id="Jc1CGOyzEY5TxovUjOKCbH">标定产物：ROI 与判读参数模板。</strong>已按本工位标好，日常读数直接复用，不必重标</td></tr>
+    <tr data-page-node-id="PWMuHqBIfRADksMZYNTKpU"><td data-page-node-id="zaQdpgIxsLSDVt2RKbAuW8"><code data-page-node-id="geUOu7FShLMDE1gDNFiDUJ">seg7_roi_preview.png</code></td><td data-page-node-id="iAjtFChul3igfaw45yAIAT">标定时的叠加预览图，用于核对各段采样框是否落在笔画正中</td></tr>
+    <tr data-page-node-id="TzfUwTDTEOWcHYcGPGwE0N"><td data-page-node-id="IKIP2gJTmwID6BPBSf5A38"><code data-page-node-id="TFTTZREtGE2MFiBgzlPuNM">snapshot.png</code></td><td data-page-node-id="oyZP97FiFH5SFgdlEVRHWL">实拍抓图，用于确认相机对准、亮度是否合适</td></tr>
+    <tr data-page-node-id="DGvl2UK3MdJDNS3rP6DLR5"><td data-page-node-id="zgTjjUkj0FygZdT5GBVSuL"><code data-page-node-id="T3JMX4ckSBOFe8QIynlman">roi_check.png</code></td><td data-page-node-id="zzxymJO7AQpUKnbiqMXmvb">在真实抓图上跑判读链路后的段级标注图，用于验收时核对裕量</td></tr>
+  </tbody>
+</table>
+
+<h3 data-page-node-id="xE726t6RFdcz2aUZ7raY2l">环境依赖</h3>
+<pre data-page-node-id="4FA4pFE7y90zoiacVOCZAF"><code data-page-node-id="xHoeGESujBkAjoqilYCkP7">pip install opencv-python numpy</code></pre>
+
+<h3 data-page-node-id="eb8b0GXK6ivJLy8i8OzSyy">离线自检已覆盖的场景</h3>
+<ul data-page-node-id="7t3Kzu3N463uoLpzRcqQYb">
+  <li data-page-node-id="ENvMy5MW1xi2h5X866xTE1">正常对比度下 8 个取值（0 / 1 / 5 / 9 / 42 / 88 / 99 / 100）全部读对</li>
+  <li data-page-node-id="puFGpl1TFQ5I8FbyhAyehC">低对比度（亮段灰度仅 90、背景 30）下仍全部读对——验证减光片装过头也扛得住</li>
+  <li data-page-node-id="VVsIcKUCUqSw27wxkIJCB9"><code data-page-node-id="httLhAYRG8Oi357u4783bf">188</code>、<code data-page-node-id="UMhFWB4xaupc5cAALnRnkM">999</code> 等越界值被拦截，不输出错值</li>
+  <li data-page-node-id="quvIvocUN81XFW6cusxPtS">三位全空白被拦截；配 <code data-page-node-id="g18O4qGw7WLtNrkMHigOXU">blank_value</code> 后可改为输出 0</li>
+  <li data-page-node-id="0EBC06cyC9WI2IlEjL6DUi">左位出现非法段组合时被标记为不精确，进而不被采用</li>
+  <li data-page-node-id="OZjeLixv9SjxsXKbN12PBQ">屏幕全灭时被拦截</li>
+  <li data-page-node-id="YLIDvfmqFRzlHC6dYUXzTS">段级裕量实测：亮段约 248、灭段约 13.5、阈值 100.8 —— 裕量约 2.5 倍，余量充足</li>
+</ul>
+
+<p class="foot" data-page-node-id="It5AUuftmCWT3G4FBwQuO8">本方案中的参数给出的是起点值，最终以现场实测为准。曝光值必须用 <code data-page-node-id="Y7XvVO7KAGjxJooZBNaiRZ">probe</code> 模式实测确定，原因是 UVC 各驱动对曝光单位的约定不一致，任何写死的数值都不可靠。</p>
+
+</main>
+
+
+
+</body></html>
